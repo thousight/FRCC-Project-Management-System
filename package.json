@@ -1,0 +1,16 @@
+{
+  "name": "projectmanagement",
+  "version": "1.0.0",
+  "description": "FRCC Project Management System",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mark Wen",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.13.1",
+    "express": "^4.13.0",
+    "morgan": "^1.6.0"
+  }
+}
