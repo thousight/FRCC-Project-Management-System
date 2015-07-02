@@ -9,8 +9,10 @@
   "author": "Mark Wen",
   "license": "ISC",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.13.1",
     "express": "^4.13.0",
+    "mongoose": "^4.0.6",
     "morgan": "^1.6.0"
   }
 }
