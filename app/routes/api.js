@@ -90,6 +90,7 @@ module.exports = function(app, express) {
     }
   });
 
+//api for creating projects
   api.route('/')
     .post(function(req, res) {
       var project = new Project({
@@ -115,7 +116,10 @@ module.exports = function(app, express) {
         res.json(project);
       });
     });
-
+  // api for angular
+  api.get('/me', function(req, res) {
+    res.json(req.decoded);
+  });
 
   return api;
 }
