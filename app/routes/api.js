@@ -18,7 +18,7 @@ function createToken(user) {
 
 module.exports = function(app, express) {
   var api = express.Router();
-// signup api
+  // signup api
   api.post('/signup', function(req, res) {
     var user = new User({
       name: req.body.name,
@@ -95,9 +95,7 @@ module.exports = function(app, express) {
       var project = new Project({
         creator: req.decoded.id,
         content: req.body.content,
-
       });
-
       project.save(function(err) {
         if (err) {
           res.send(err);
@@ -105,9 +103,19 @@ module.exports = function(app, express) {
         }
         res.json({
           message: "New Project Created!"
-        })
-      })
+        });
+      });
+    })
+    .get(function(req, res) {
+      Project.find( {creator: req.decoded.id}, function(err, project) {
+        if (err) {
+          res.send(err);
+          return;
+        }
+        res.json(project);
+      });
     });
+
 
   return api;
 }
