@@ -75,7 +75,7 @@ module.exports = function(app, express) {
   //middleware
   api.use(function(req, res, next) {
     console.log("Somebody just logged in!");
-    var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+    var token = req.body.token || req.params('token') || req.headers['x-access-token'];
     if (token) {
       jsonwebtoken.verify(token, secretKey, function(err, decoded) {
         if (err) {

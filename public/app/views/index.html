@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="MyApp" lang="en">
 <head>
+  <base href='/'>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,15 +20,19 @@
 
   <!-- AngularJS -->
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-route.min.js"></script>
+
+  <!-- Handwritten JS -->
+  <script type="text/javascript" src="app/services/authService.js"></script>
+  <script type="text/javascript" src="app/controllers/mainCtrl.js"></script>
+  <script type="text/javascript" src="app/app.route.js"></script>
   <script type="text/javascript" src="app/app.js"></script>
 </head>
 <body>
-  <div class = 'main'>
-    <h1>
-      Project Management System
-    </h1>
-    {{ 2 + 2 }}
-  </div>
+
+  <main class="container">
+    <div ng-view></div>
+  </main>
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
