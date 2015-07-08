@@ -22,13 +22,18 @@
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-route.min.js"></script>
 
+  <!-- Socket.io -->
+  <script type="text/javascript" src="socket.io/socket.io.js"></script>
+
   <!-- Services -->
   <script type="text/javascript" src="app/services/authService.js"></script>
   <script type="text/javascript" src="app/services/userService.js"></script>
+  <script type="text/javascript" src="app/services/projectService.js"></script>
 
   <!-- Controllers -->
   <script type="text/javascript" src="app/controllers/mainCtrl.js"></script>
   <script type="text/javascript" src="app/controllers/userCtrl.js"></script>
+  <script type="text/javascript" src="app/controllers/ProjectCtrl.js"></script>
 
   <!-- App Routing -->
   <script type="text/javascript" src="app/app.route.js"></script>
@@ -52,10 +57,10 @@
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li ng-if="!main.loggedIn"><a href="/login">Login</a></li>
-          <li ng-if="!main.loggedIn"><a href="/signup">Signup</a></li>
-          <li ng-if="main.loggedIn"><a href="#">Hello {{ main.user.name }}</a></li>
-          <li ng-if="main.loggedIn"><a href="#" ng-click="main.doLogout()">Logout</a></li>
+          <li ng-if="!main.loggedIn"><a href="/login">Log In</a></li>
+          <li ng-if="!main.loggedIn"><a href="/signup">Sign Up</a></li>
+          <li ng-if="main.loggedIn"><a href="#">Hello, {{ main.user.name }}</a></li>
+          <li ng-if="main.loggedIn"><a href="#" ng-click="main.doLogout()">Log Out</a></li>
         </ul>
       </div>
     </div>
