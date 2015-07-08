@@ -5,7 +5,10 @@ angular.module('projectService', [])
   projectFactory.create = function(projectData) {
     return $http.post('/api', projectData);
   }
-  projectFactory.allProject = function() {
+  projectFactory.allProjects = function() {
+    return $http.get('/api/all_projects');
+  }
+  projectFactory.all = function() {
     return $http.get('/api');
   }
   return projectFactory;
@@ -15,11 +18,12 @@ angular.module('projectService', [])
   var socket = io.connect();
   return {
     on: function(eventName, callback) {
-      socket.on(eventName, function() {
-        $rootScope.$apply(function() {
-          callback.apply(socket, args);
-        })
-      })
+          socket.on(eventName, function() {
+            var args = arguments;
+            $rootScope.$apply(function() {
+              callback.apply(socket, args);
+            })
+          })
     },
 
     emit: function(eventName, data, callback) {

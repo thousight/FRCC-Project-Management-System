@@ -29,7 +29,7 @@
         <div class="panel-heading">
           Your Projects
         </div>
-        <div class="panel-body" ng-repeat="each in project.projects">
+        <div class="panel-body" ng-repeat="each in project.projects | reverse">
           <p>
             {{ each.content }}
           </p>

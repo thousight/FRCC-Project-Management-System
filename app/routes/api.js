@@ -18,6 +18,16 @@ function createToken(user) {
 
 module.exports = function(app, express, io) {
   var api = express.Router();
+
+  api.get('/all_projects', function(req, res) {
+    Project.find({}, function(err, projects) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(projects);
+    })
+  })
   // signup api
   api.post('/signup', function(req, res) {
     var user = new User({
