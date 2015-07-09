@@ -25,6 +25,7 @@ angular.module('mainCtrl', [])
           });
         if(data.success) {
           $location.path('/');
+          location.reload();
         } else {
           vm.error = data.message;
         }
@@ -33,6 +34,7 @@ angular.module('mainCtrl', [])
 
   vm.doLogout = function() {
     Auth.logout();
-    $location.path('/logout');
+    $location.path('/');
+    location.reload();
   }
 })

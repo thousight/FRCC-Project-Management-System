@@ -7,15 +7,6 @@ angular.module('appRoutes', ['ngRoute'])
       controller: 'MainController',
       controllerAs: 'main'
     })
-    .when('/login', {
-      templateUrl: 'app/views/pages/login.html'
-    })
-    .when('/signup', {
-      templateUrl: 'app/views/pages/signup.html'
-    })
-    .when('/logout', {
-      templateUrl: 'app/views/pages/logout.html'
-    })
     .when('/allProjects', {
       templateUrl: 'app/views/pages/allProjects.html',
       controller: 'AllProjectsController',

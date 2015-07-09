@@ -1,13 +1,22 @@
-<div class="jumbotron text-center" ng-if="!main.loggedIn">
-  <div>
+<div class="jumbotron" ng-if="!main.loggedIn">
+  <div class="text-center">
     <h1>Welcome</h1>
+    <h3>Please Log In</h3><br>
   </div>
-  <div>
-    <p>
-      Please Login
-    </p>
-    <a href="/login" class="btn btn-primary">Log In</a>
+  <div class="container" ng-controller="MainController as login">
+    <div class="row">
+      <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <form class="form-login" method="post" ng-submit="login.doLogin()">
+          Username: <br><input type="text" required placeholder="Username" name="username" class="form-control" ng-model="login.loginData.username"><br>
+          Password: <br><input type="password" required placeholder="Password" name="password" class="form-control" ng-model="login.loginData.password"><br>
+          <div class="text-center">
+          <button type="submit" class="btn btn-primary">Log In</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
+
 </div>
 
 <div class="row" ng-if="main.loggedIn">

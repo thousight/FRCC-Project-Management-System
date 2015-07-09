@@ -52,7 +52,7 @@
     <div class="navbar navbar-default">
       <div class="container">
         <div class="navbar-header">
-          <a href="/" class="navbar-brand"><span class="glyphicon glyphicon-book"></span>Project Management System</a>
+          <a href="/" class="navbar-brand"><span class="glyphicon glyphicon-book"></span>FRCC Project Management System</a>
         </div>
         <ul class="nav navbar-nav">
           <li>
@@ -60,8 +60,6 @@
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li ng-if="!main.loggedIn"><a href="/login">Log In</a></li>
-          <li ng-if="!main.loggedIn"><a href="/signup">Sign Up</a></li>
           <li ng-if="main.loggedIn"><a href="#">Hello, {{ main.user.firstname }}</a></li>
           <li ng-if="main.loggedIn"><a href="#" ng-click="main.doLogout()">Log Out</a></li>
         </ul>

@@ -28,7 +28,7 @@ var UserSchema = new Schema ({
     select: false
   },
 
-  dept: {
+  department: {
     type: String,
     required: true
   }

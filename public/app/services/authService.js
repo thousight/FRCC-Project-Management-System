@@ -62,7 +62,7 @@ angular.module('authService', [])
 
   interceptorFactory.responseErro = function(response) {
     if(response.status == 403) {
-      $location.path('/login');
+      $location.path('/');
     }
     return $q.reject(response);
   }

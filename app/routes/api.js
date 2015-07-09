@@ -29,44 +29,12 @@ module.exports = function(app, express, io) {
       res.json(projects);
     })
   })
-  // signup api
-  api.post('/signup', function(req, res) {
-    var user = new User({
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      username: req.body.username,
-      password: req.body.password,
-      dept: req.body.dept
-    });
-    var token = createToken(user);
-    user.save(function(err) {
-      if (err) {
-        res.send(err);
-        return;
-      }
-      res.json({
-        success: true,
-        message: 'User has been created!',
-        token: token
-      });
-    })
-  })
-  api.get('/users', function(req, res) {
-    //mongoose method, finding all users in the database
-    User.find({}, function(err, users) {
-      if (err) {
-        res.send(err);
-        return;
-      }
-      res.json(users);
-    })
-  })
 
   // login api
   api.post('/login', function(req, res) {
     User.findOne({
       username: req.body.username
-    }).select('firstname lastname username password dept').exec(function(err, user) {
+    }).select('firstname lastname username password department').exec(function(err, user) {
       if(err) {
         throw err;
       }
