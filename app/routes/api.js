@@ -8,7 +8,8 @@ var jsonwebtoken = require('jsonwebtoken');
 function createToken(user) {
   var token = jsonwebtoken.sign({
     id: user._id,
-    name: user.name,
+    firstname: user.firstname,
+    lastname: user.lastname,
     username: user.username
   }, secretKey, {
     expirtesInMinute: 1440
@@ -31,9 +32,11 @@ module.exports = function(app, express, io) {
   // signup api
   api.post('/signup', function(req, res) {
     var user = new User({
-      name: req.body.name,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
       username: req.body.username,
-      password: req.body.password
+      password: req.body.password,
+      dept: req.body.dept
     });
     var token = createToken(user);
     user.save(function(err) {
@@ -63,7 +66,7 @@ module.exports = function(app, express, io) {
   api.post('/login', function(req, res) {
     User.findOne({
       username: req.body.username
-    }).select('name username password').exec(function(err, user) {
+    }).select('firstname lastname username password dept').exec(function(err, user) {
       if(err) {
         throw err;
       }

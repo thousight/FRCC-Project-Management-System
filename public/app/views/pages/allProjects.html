@@ -1,11 +1,11 @@
-<div class="row">
+<div class="row"  ng-if="main.loggedIn">
   <div class="col-md-3"></div>
 
   <div class="col-md-4">
     <div class="row">
       <div class="panel panel-success">
         <div class="panel-heading">
-          Your Projects
+          All Projects in Database
         </div>
         <div class="panel-body" ng-repeat="each in project.projects | reverse">
           <p>
