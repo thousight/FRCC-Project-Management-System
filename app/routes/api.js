@@ -3,7 +3,6 @@ var Project = require('../models/project');
 var config = require('../../config');
 var secretKey = config.secretKey;
 var jsonwebtoken = require('jsonwebtoken');
-var fields = 'frcc_member_id username password cname firstname lastname contact_phone cell_phone email street city state zip country isMale status selected frcc_member frcc_family_id family_relation marital_status main_language christian primary_group frcc_familyserve zone_leader_id groups dob first_sunday salvation baptize discount_code frtc_teacher frtc_registered frtc_eschool frtc_equipping pm_role created_date update_date update_person department division organization';
 
 // Create tokens for users with jsonwebtoken
 function createToken(user) {
@@ -35,7 +34,7 @@ module.exports = function(app, express, io) {
   api.post('/login', function(req, res) {
     User.findOne({
       username: req.body.username
-    }).select(fields).exec(function(err, user) {
+    }).select('firstname lastname username password department').exec(function(err, user) {
       if(err) {
         throw err;
       }
