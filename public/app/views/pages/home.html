@@ -1,7 +1,7 @@
 <div class="jumbotron" ng-if="!main.loggedIn">
   <div class="text-center">
     <h1>Welcome</h1>
-    <h3>Please Log In</h3><br>
+    <h3>Please log in</h3><br>
   </div>
   <div class="container" ng-controller="MainController as login">
     <div class="row">
@@ -10,43 +10,86 @@
           Username: <br><input type="text" required placeholder="Username" name="username" class="form-control" ng-model="login.loginData.username"><br>
           Password: <br><input type="password" required placeholder="Password" name="password" class="form-control" ng-model="login.loginData.password"><br>
           <div class="text-center">
-          <button type="submit" class="btn btn-primary">Log In</button>
+            <button type="submit" class="btn btn-primary">Log In</button>
           </div>
         </form>
       </div>
     </div>
   </div>
-
 </div>
 
 <div class="row" ng-if="main.loggedIn">
-  <div class="col-md-3">
+  <div class="col-md-2">
 
   </div>
-
-  <div class="col-md-4" ng-controller="ProjectController as project">
+  <div class="col-md-8" ng-controller="ProjectController as project">
     <div class="row">
       <div class="panel panel-primary">
-        <div class="panel-heading">Create a new project</div>
+        <div class="panel-heading"><h3>Create a new project</h3></div>
         <div class="panel-body">
           <form ng-submit="project.createProject()">
-            <input class="form-control input-lg" type="text" name=project ng-model="project.projectData.content" placeholder="....." required>
+            Title: <br>
+            <input class="form-control input-sm" type="text" name=title ng-model="project.projectData.title" required>
+            Short Description: <br>
+            <input class="form-control input-sm" type="text" name=short_description ng-model="project.projectData.short_description" required>
+            Description: <br>
+            <input class="form-control input-lg" type="text" name=description ng-model="project.projectData.description" required>
+            Priority: <br>
+            <input class="form-control input-sm" type="text" name=priority ng-model="project.projectData.priority" required>
+            Status: <br>
+            <input class="form-control input-sm" type="text" name=status ng-model="project.projectData.status" required>
+            Assign Department: <br>
+            <input class="form-control input-sm" type="text" name=assign_dept ng-model="project.projectData.assign_dept" required>
+            Estimate Cost: <br>
+            <input class="form-control input-sm" type="text" name=estimate_cost ng-model="project.projectData.estimate_cost" required>
+            Actual Cost: <br>
+            <input class="form-control input-sm" type="text" name=actual_cost ng-model="project.projectData.actual_cost" required>
+            Due Date: <br>
+            <input class="form-control input-sm" type="text" name=due_date ng-model="project.projectData.due_date" required>
+            Start Date: <br>
+            <input class="form-control input-sm" type="text" name=start_date ng-model="project.projectData.start_date" required>
+            Complete Date: <br>
+            <input class="form-control input-sm" type="text" name=complete_date ng-model="project.projectData.complete_date" required>
+            Complete PCT: <br>
+            <input class="form-control input-sm" type="text" name=complete_pct ng-model="project.projectData.complete_pct" required>
+            <div class="text-right">
+              <br><button class="btn btn-primary" type="submit">Submit</button>
+            </div>
           </form>
         </div>
       </div>
-      <div class="panel panel-success">
+
+      <div class="panel panel-primary">
         <div class="panel-heading">
-          Your Projects
+          <h3>Your Projects</h3>
         </div>
-        <div class="panel-body" ng-repeat="each in project.projects | reverse">
-          <p>
-            {{ each.content }}
-          </p>
+        <div class="panel-group" ng-repeat="project in project.projects | reverse">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h4>{{project.title}}: {{project.short_description}} <span class="badge">{{project.dateCreated | date : format}}</span></h4>
+            </div>
+            <div class="panel-collapse">
+              <p class="panel-body">
+                Created by: {{project.creator}}<br>
+                Creator Department: {{project.creator_dept}}<br>
+                Description: {{project.description}}<br>
+                Priority: {{project.priority}}<br>
+                Status: {{project.status}}<br>
+                Assign Department: {{project.assign_dept}}<br>
+                Estimate Cost: {{project.estimate_cost}}<br>
+                Actual Cost: {{project.actual_cost}}<br>
+                Due Date: {{project.due_date | date : format}}<br>
+                Start Date: {{project.start_date | date : format}}<br>
+                Complete Date: {{project.complete_date | date : format}}<br>
+                Compete PCT: {{project.complete_pct}}<br>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-2">
 
   </div>
 </div>

@@ -3,6 +3,7 @@ var Project = require('../models/project');
 var config = require('../../config');
 var secretKey = config.secretKey;
 var jsonwebtoken = require('jsonwebtoken');
+var fields = 'frcc_member_id username password cname firstname lastname contact_phone cell_phone email street city state zip country isMale status selected frcc_member frcc_family_id family_relation marital_status main_language christian primary_group frcc_familyserve zone_leader_id groups dob first_sunday salvation baptize discount_code frtc_teacher frtc_registered frtc_eschool frtc_equipping pm_role created_date update_date update_person department division organization';
 
 // Create tokens for users with jsonwebtoken
 function createToken(user) {
@@ -34,7 +35,7 @@ module.exports = function(app, express, io) {
   api.post('/login', function(req, res) {
     User.findOne({
       username: req.body.username
-    }).select('firstname lastname username password department').exec(function(err, user) {
+    }).select(fields).exec(function(err, user) {
       if(err) {
         throw err;
       }
@@ -78,22 +79,35 @@ module.exports = function(app, express, io) {
   api.route('/')
     .post(function(req, res) {
       var project = new Project({
-        creator: req.decoded.id,
-        content: req.body.content,
+        creatorID: req.decoded.id,
+        creator: req.decoded.firstname + " " + req.decoded.lastname,
+        creator_dept: req.decoded.department,
+        title: req.body.title,
+        short_description: req.body.short_description,
+        description: req.body.description,
+        priority: req.body.priority,
+        status: req.body.status,
+        assign_dept: req.body.assign_dept,
+        estimate_cost: req.body.estimate_cost,
+        actual_cost: req.body.actual_cost,
+        due_date: req.body.due_date,
+        start_date: req.body.start_date,
+        complete_date: req.body.complete_date,
+        complete_pct: req.body.complete_pct
       });
       project.save(function(err, newProject) {
         if (err) {
           res.send(err);
           return;
         }
-        io.emit('project', newProject)
+        io.emit('project', newProject);
         res.json({
           message: "New Project Created!"
         });
       });
     })
     .get(function(req, res) {
-      Project.find( {creator: req.decoded.id}, function(err, project) {
+      Project.find( {creatorID: req.decoded.id}, function(err, project) {
         if (err) {
           res.send(err);
           return;
