@@ -35,21 +35,20 @@
               Description: <br>
               <input class="form-control input-lg" type="text" name=description ng-model="project.projectData.description" required>
               Priority: <br>
-              <input class="form-control input-sm" type="text" name=priority ng-model="project.projectData.priority" required>
-              Status: <br>
-              <input class="form-control input-sm" type="text" name=status ng-model="project.projectData.status" required>
+              <select class="form-control input-sm" type="text" name=priority ng-model="project.projectData.priority" required>
+                <option value="Important">Important</option>
+                <option value="Emergency">Emergency</option>
+              </select>
               Assign Department: <br>
               <input class="form-control input-sm" type="text" name=assign_dept ng-model="project.projectData.assign_dept" required>
               Estimate Cost: <br>
               <input class="form-control input-sm" type="text" name=estimate_cost ng-model="project.projectData.estimate_cost" required>
-              Actual Cost: <br>
-              <input class="form-control input-sm" type="text" name=actual_cost ng-model="project.projectData.actual_cost" required>
               Due Date: <br>
-              <input class="form-control input-sm" type="text" name=due_date ng-model="project.projectData.due_date" required>
+              <input class="form-control input-sm" type="date" name=due_date ng-model="project.projectData.due_date" required>
               Start Date: <br>
-              <input class="form-control input-sm" type="text" name=start_date ng-model="project.projectData.start_date" required>
-              Complete Date: <br>
-              <input class="form-control input-sm" type="text" name=complete_date ng-model="project.projectData.complete_date" required>
+              <input class="form-control input-sm" type="date" name=start_date ng-model="project.projectData.start_date" required>
+              Completed Date: <br>
+              <input class="form-control input-sm" type="date" name=complete_date ng-model="project.projectData.complete_date" required>
               Complete PCT: <br>
               <input class="form-control input-sm" type="text" name=complete_pct ng-model="project.projectData.complete_pct" required>
               <div class="text-right">
@@ -68,7 +67,7 @@
       <div class="panel-group" ng-repeat="project in project.projects | reverse">
         <div class="panel panel-info">
           <div class="panel-heading" data-toggle="collapse" data-target="#projectDetails{{$index}}" href="#projectDetails{{$index}}">
-            <h4>{{project.title}}: {{project.short_description}} <span class="badge">{{project.dateCreated | date : format}}</span></h4>
+            <h4>{{project.title}}: {{project.short_description}} <span class="badge">{{project.status}}</span></h4>
           </div>
           <div class="panel-collapse collapse out" id="projectDetails{{$index}}">
             <p class="panel-body">
@@ -76,10 +75,10 @@
               Creator Department: {{project.creator_dept}}<br>
               Description: {{project.description}}<br>
               Priority: {{project.priority}}<br>
-              Status: {{project.status}}<br>
               Assign Department: {{project.assign_dept}}<br>
               Estimate Cost: {{project.estimate_cost}}<br>
               Actual Cost: {{project.actual_cost}}<br>
+              Date Created: {{project.dateCreated | date : format}}<br>
               Due Date: {{project.due_date | date : format}}<br>
               Start Date: {{project.start_date | date : format}}<br>
               Complete Date: {{project.complete_date | date : format}}<br>

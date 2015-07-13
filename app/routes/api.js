@@ -78,6 +78,18 @@ module.exports = function(app, express, io) {
 //api for projects handling
   api.route('/')
     .post(function(req, res) {
+      var status = function(start_date, due_date)　{
+        var now = Date.now();
+        if (now >= start_date && due_date > start_date) {
+          return "In progress";
+        }
+        else if (now >= due_date) {
+          return "Finished";
+        }
+        else {
+          return "Not yet started";
+        }
+      }
       var project = new Project({
         creatorID: req.decoded.id,
         creator: req.decoded.firstname + " " + req.decoded.lastname,
@@ -86,14 +98,14 @@ module.exports = function(app, express, io) {
         short_description: req.body.short_description,
         description: req.body.description,
         priority: req.body.priority,
-        status: req.body.status,
+        status: status(req.body.start_date, req.body.due_date),
         assign_dept: req.body.assign_dept,
         estimate_cost: req.body.estimate_cost,
         actual_cost: req.body.actual_cost,
         due_date: req.body.due_date,
         start_date: req.body.start_date,
         complete_date: req.body.complete_date,
-        complete_pct: req.body.complete_pct
+        complete_pct: req.body.complete_pct,
       });
       project.save(function(err, newProject) {
         if (err) {
