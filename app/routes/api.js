@@ -75,62 +75,73 @@ module.exports = function(app, express, io) {
     }
   });
 
-//api for projects handling
+  //api for projects handling
   api.route('/')
-    .post(function(req, res) {
-      var status = function(start_date, due_date)　{
-        var now = Date.now();
-        if (now >= start_date && due_date > start_date) {
-          return "In progress";
-        }
-        else if (now >= due_date) {
-          return "Finished";
-        }
-        else {
+  .post(function(req, res) {
+    // Compare dates to get status
+    var calcStatus = function(userDefinedStatus)　{
+      var now = new Date();
+      var start = new Date(req.body.start_date);
+      var due = new Date(req.body.due_date);
+      userDefinedStatus = "New";
+      console.log(userDefinedStatus);
+      if (userDefinedStatus === "New") {
+        if (now < start && now < due && start < due) {
           return "Not yet started";
         }
+        else if (now >= start && now <= due && start <= due) {
+          return "In progress";
+        }
+        else if (now > due && start <= due && now > start) {
+          return "Passed due";
+        }
+        else {
+          res.send("Start date should be earlier than due date, please retry.");
+        }
+      } else {
+        return userDefinedStatus;
       }
-      var project = new Project({
-        creatorID: req.decoded.id,
-        creator: req.decoded.firstname + " " + req.decoded.lastname,
-        creator_dept: req.decoded.department,
-        title: req.body.title,
-        short_description: req.body.short_description,
-        description: req.body.description,
-        priority: req.body.priority,
-        status: status(req.body.start_date, req.body.due_date),
-        assign_dept: req.body.assign_dept,
-        estimate_cost: req.body.estimate_cost,
-        actual_cost: req.body.actual_cost,
-        due_date: req.body.due_date,
-        start_date: req.body.start_date,
-        complete_date: req.body.complete_date,
-        complete_pct: req.body.complete_pct,
-      });
-      project.save(function(err, newProject) {
-        if (err) {
-          res.send(err);
-          return;
-        }
-        io.emit('project', newProject);
-        res.json({
-          message: "New Project Created!"
-        });
-      });
-    })
-    .get(function(req, res) {
-      Project.find( {creatorID: req.decoded.id}, function(err, project) {
-        if (err) {
-          res.send(err);
-          return;
-        }
-        res.json(project);
+    }
+    var project = new Project({
+      creatorID: req.decoded.id,
+      creator: req.decoded.firstname + " " + req.decoded.lastname,
+      creator_dept: req.decoded.department,
+      title: req.body.title,
+      short_description: req.body.short_description,
+      description: req.body.description,
+      priority: req.body.priority,
+      status: calcStatus(req.body.status),
+      assign_dept: req.body.assign_dept,
+      estimate_cost: req.body.estimate_cost,
+      actual_cost: req.body.actual_cost,
+      due_date: req.body.due_date,
+      start_date: req.body.start_date,
+      complete_date: req.body.complete_date,
+      complete_pct: req.body.complete_pct,
+    });
+    project.save(function(err, newProject) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      io.emit('project', newProject);
+      res.json({
+        message: "New Project Created!"
       });
     });
+  })
+  .get(function(req, res) {
+    Project.find( {creatorID: req.decoded.id}, function(err, project) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(project);
+    });
+  });
   // api for angular
   api.get('/me', function(req, res) {
     res.json(req.decoded);
   });
-
   return api;
 }

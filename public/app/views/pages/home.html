@@ -39,16 +39,16 @@
                 <option value="Important">Important</option>
                 <option value="Emergency">Emergency</option>
               </select>
+              <input type="hidden" name=status value="New" ng-model="project.projectData.status" required>
               Assign Department: <br>
               <input class="form-control input-sm" type="text" name=assign_dept ng-model="project.projectData.assign_dept" required>
               Estimate Cost: <br>
               <input class="form-control input-sm" type="text" name=estimate_cost ng-model="project.projectData.estimate_cost" required>
-              Due Date: <br>
-              <input class="form-control input-sm" type="date" name=due_date ng-model="project.projectData.due_date" required>
               Start Date: <br>
               <input class="form-control input-sm" type="date" name=start_date ng-model="project.projectData.start_date" required>
-              Completed Date: <br>
-              <input class="form-control input-sm" type="date" name=complete_date ng-model="project.projectData.complete_date" required>
+              Due Date: <br>
+              <input class="form-control input-sm" type="date" name=due_date  ng-model="project.projectData.due_date" required>
+              <input type="hidden" name=complete_date value="0" ng-model="project.projectData.complete_date" required>
               Complete PCT: <br>
               <input class="form-control input-sm" type="text" name=complete_pct ng-model="project.projectData.complete_pct" required>
               <div class="text-right">
