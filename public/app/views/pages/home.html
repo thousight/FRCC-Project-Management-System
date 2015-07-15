@@ -35,22 +35,20 @@
               Description: <br>
               <input class="form-control input-lg" type="text" name=description ng-model="project.projectData.description" required>
               Priority: <br>
-              <select class="form-control input-sm" type="text" name=priority ng-model="project.projectData.priority" required>
-                <option value="Important">Important</option>
-                <option value="Emergency">Emergency</option>
-              </select>
-              <input type="hidden" name=status value="New" ng-model="project.projectData.status" required>
+              <Input type="radio" name=priority ng-model="project.projectData.priority" value="Important" required>Important<br>
+              <Input type="radio" name=priority ng-model="project.projectData.priority" value="Emergent" required>Emergent<br>
               Assign Department: <br>
-              <input class="form-control input-sm" type="text" name=assign_dept ng-model="project.projectData.assign_dept" required>
+              <select class="form-control input-sm" type="text" name=assign_dept ng-model="project.projectData.assign_dept" required>
+                <option value="Accounting">Accounting</option>
+                <option value="IT">IT</option>
+                <option value="Media">Media</option>
+              </select>
               Estimate Cost: <br>
               <input class="form-control input-sm" type="text" name=estimate_cost ng-model="project.projectData.estimate_cost" required>
               Start Date: <br>
               <input class="form-control input-sm" type="date" name=start_date ng-model="project.projectData.start_date" required>
               Due Date: <br>
               <input class="form-control input-sm" type="date" name=due_date  ng-model="project.projectData.due_date" required>
-              <input type="hidden" name=complete_date value="0" ng-model="project.projectData.complete_date" required>
-              Complete PCT: <br>
-              <input class="form-control input-sm" type="text" name=complete_pct ng-model="project.projectData.complete_pct" required>
               <div class="text-right">
                 <br><button class="btn btn-primary" type="submit">Submit</button>
               </div>
@@ -79,8 +77,8 @@
               Estimate Cost: {{project.estimate_cost}}<br>
               Actual Cost: {{project.actual_cost}}<br>
               Date Created: {{project.dateCreated | date : format}}<br>
-              Due Date: {{project.due_date | date : format}}<br>
               Start Date: {{project.start_date | date : format}}<br>
+              Due Date: {{project.due_date | date : format}}<br>
               Complete Date: {{project.complete_date | date : format}}<br>
               Compete PCT: {{project.complete_pct}}<br>
             </p>

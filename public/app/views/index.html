@@ -13,13 +13,6 @@
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
-  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-  <![endif]-->
-
   <!-- AngularJS -->
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-route.min.js"></script>
@@ -45,9 +38,8 @@
 
   <!-- app.js -->
   <script type="text/javascript" src="app/app.js"></script>
-
-
 </head>
+
 <body ng-controller="MainController as main">
   <!-- Navigation Bar -->
   <header>
@@ -56,14 +48,10 @@
         <div class="navbar-header">
           <a href="/" class="navbar-brand"><span class="glyphicon glyphicon-tasks"></span> FRCC Project Management System</a>
         </div>
-        <ul class="nav navbar-nav">
-          <li>
-            <a href="/users"></a>
-          </li>
-        </ul>
+
         <ul class="nav navbar-nav navbar-right">
-          <li ng-if="main.loggedIn"><a href="#">Hello, {{ main.user.firstname }}</a></li>
-          <li ng-if="main.loggedIn"><a href="#" ng-click="main.doLogout()">Log Out</a></li>
+          <li class="text-center" ng-if="main.loggedIn"><a href="#">Hello, {{ main.user.firstname }}</a></li>
+          <li class="text-center" ng-if="main.loggedIn"><a href="#" ng-click="main.doLogout()">Log Out</a></li>
         </ul>
       </div>
     </div>

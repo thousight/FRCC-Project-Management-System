@@ -8,6 +8,17 @@ angular.module('projectCtrl', ['projectService'])
     })
 
   vm.createProject = function() {
+
+    // Wrong due date prevention
+    var start = new Date(vm.projectData.start_date);
+    var due = new Date(vm.projectData.due_date);
+    console.log(start);
+    if (start > due) {
+      alert("Due date can't be earlier than start date, please decide a new due date.");
+      return;
+    }
+
+    // Create project
     vm.message = '';
     Project.create(vm.projectData)
       .success(function(data) {

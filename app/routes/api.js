@@ -79,27 +79,33 @@ module.exports = function(app, express, io) {
   api.route('/')
   .post(function(req, res) {
     // Compare dates to get status
-    var calcStatus = function(userDefinedStatus)　{
+    var calcStatus = function()　{
       var now = new Date();
-      var start = new Date(req.body.start_date);
-      var due = new Date(req.body.due_date);
-      userDefinedStatus = "New";
-      console.log(userDefinedStatus);
-      if (userDefinedStatus === "New") {
-        if (now < start && now < due && start < due) {
-          return "Not yet started";
-        }
-        else if (now >= start && now <= due && start <= due) {
-          return "In progress";
-        }
-        else if (now > due && start <= due && now > start) {
-          return "Passed due";
-        }
-        else {
-          res.send("Start date should be earlier than due date, please retry.");
-        }
-      } else {
-        return userDefinedStatus;
+      var today_obj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      var start_obj = new Date(req.body.start_date);
+      var due_obj = new Date(req.body.due_date);
+      var today = today_obj.getTime();
+      var start = start_obj.getTime();
+      var due = due_obj.getTime();
+      // Now is before project start date
+      if (today < start) {
+        return "Not started";
+      }
+      // Today is project start date and it's not an one-day event
+      else if (today == start && start != due) {
+        return "Starts today";
+      }
+      // Today is project due date or it's an one-day event
+      else if (today == due || start == due) {
+        return "Due today";
+      }
+      // Now is in project date range
+      else if (today > start && start != due) {
+        return "In progress";
+      }
+      // Anything else
+      else {
+        return "Passed due";
       }
     }
     var project = new Project({
@@ -110,14 +116,13 @@ module.exports = function(app, express, io) {
       short_description: req.body.short_description,
       description: req.body.description,
       priority: req.body.priority,
-      status: calcStatus(req.body.status),
+      status: calcStatus(),
       assign_dept: req.body.assign_dept,
       estimate_cost: req.body.estimate_cost,
       actual_cost: req.body.actual_cost,
       due_date: req.body.due_date,
       start_date: req.body.start_date,
       complete_date: req.body.complete_date,
-      complete_pct: req.body.complete_pct,
     });
     project.save(function(err, newProject) {
       if (err) {
