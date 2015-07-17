@@ -15,8 +15,7 @@ var ProjectSchema = new Schema ({
   actual_cost: Number,
   due_date: Date,
   start_date: Date,
-  complete_date: Date,
-  complete_pct: String,
+  complete_date: {type: String, default: "Incomplete"},
   dateCreated: {type: Date, default: Date.now}
 });
 

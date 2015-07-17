@@ -36,56 +36,106 @@
               <input class="form-control input-lg" type="text" name=description ng-model="project.projectData.description" required>
               Priority: <br>
               <Input type="radio" name=priority ng-model="project.projectData.priority" value="Important" required>Important<br>
-              <Input type="radio" name=priority ng-model="project.projectData.priority" value="Emergent" required>Emergent<br>
-              Assign Department: <br>
-              <select class="form-control input-sm" type="text" name=assign_dept ng-model="project.projectData.assign_dept" required>
-                <option value="Accounting">Accounting</option>
-                <option value="IT">IT</option>
-                <option value="Media">Media</option>
-              </select>
-              Estimate Cost: <br>
-              <input class="form-control input-sm" type="text" name=estimate_cost ng-model="project.projectData.estimate_cost" required>
-              Start Date: <br>
-              <input class="form-control input-sm" type="date" name=start_date ng-model="project.projectData.start_date" required>
-              Due Date: <br>
-              <input class="form-control input-sm" type="date" name=due_date  ng-model="project.projectData.due_date" required>
-              <div class="text-right">
-                <br><button class="btn btn-primary" type="submit">Submit</button>
+                <Input type="radio" name=priority ng-model="project.projectData.priority" value="Emergent" required>Emergent<br>
+                  Assign Department: <br>
+                  <select class="form-control input-sm" type="text" name=assign_dept ng-model="project.projectData.assign_dept" required>
+                    <option value="Accounting">Accounting</option>
+                    <option value="IT">IT</option>
+                    <option value="Media">Media</option>
+                  </select>
+                  Estimate Cost: <br>
+                  <input class="form-control input-sm" type="text" name=estimate_cost ng-model="project.projectData.estimate_cost" required>
+                  Start Date: <br>
+                  <input class="form-control input-sm" type="date" name=start_date ng-model="project.projectData.start_date" required>
+                  Due Date: <br>
+                  <input class="form-control input-sm" type="date" name=due_date  ng-model="project.projectData.due_date" required>
+                  <div class="text-right">
+                    <br><button class="btn btn-primary" type="submit">Submit</button>
+                  </div>
+                </form>
               </div>
-            </form>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="panel panel-primary col-md-8">
-      <div class="panel-heading">
-        <h3>Your Projects</h3>
-      </div>
-      <div class="panel-group" ng-repeat="project in project.projects | reverse">
-        <div class="panel panel-info">
-          <div class="panel-heading" data-toggle="collapse" data-target="#projectDetails{{$index}}" href="#projectDetails{{$index}}">
-            <h4>{{project.title}}: {{project.short_description}} <span class="badge">{{project.status}}</span></h4>
+        <div class="panel panel-primary col-md-8">
+          <div class="panel-heading">
+            <h3>Your Projects</h3>
           </div>
-          <div class="panel-collapse collapse out" id="projectDetails{{$index}}">
-            <p class="panel-body">
-              Created by: {{project.creator}}<br>
-              Creator Department: {{project.creator_dept}}<br>
-              Description: {{project.description}}<br>
-              Priority: {{project.priority}}<br>
-              Assign Department: {{project.assign_dept}}<br>
-              Estimate Cost: {{project.estimate_cost}}<br>
-              Actual Cost: {{project.actual_cost}}<br>
-              Date Created: {{project.dateCreated | date : format}}<br>
-              Start Date: {{project.start_date | date : format}}<br>
-              Due Date: {{project.due_date | date : format}}<br>
-              Complete Date: {{project.complete_date | date : format}}<br>
-              Compete PCT: {{project.complete_pct}}<br>
-            </p>
+          <div class="panel-group" ng-repeat="project in project.projects | reverse">
+            <div class="panel panel-info">
+              <div class="panel-heading" data-toggle="collapse" data-target="#projectDetails{{$index}}" href="#projectDetails{{$index}}">
+                <h4>{{project.title}}: {{project.short_description}} <span class="badge">{{project.status}}</span></h4>
+              </div>
+              <div class="panel-collapse collapse out" id="projectDetails{{$index}}">
+                <p class="panel-body">
+                  <div class="progress-bar" role="progressbar" aria-valuenow="{{project.complete_pct}}" aria-valuemin="0" aria-valuemax="100" stype="width=60%">
+                    {{project.complete_pct}}
+                  </div><br>
+                  <div class="text-center">
+                    <div class="btn-group btn-group-justified" role="group" aria-label="projectFunctions">
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary">Add Task</button>
+                      </div>
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary">Edit</button>
+                      </div>
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary">Complete</button>
+                      </div>
+                    </div>
+                  </div><br>
+                  <table class="table table-responsive table-bordered table-hover">
+                    <tr>
+                      <th>Created by: </th>
+                      <td>{{project.creator}}</td>
+                    </tr>
+                    <tr>
+                      <th>Creator Department: </th>
+                      <td>{{project.creator_dept}}</td>
+                    </tr>
+                    <tr>
+                      <th>Description: </th>
+                      <td>{{project.description}}</td>
+                    </tr>
+                    <tr>
+                      <th>Priority: </th>
+                      <td>{{project.priority}}</td>
+                    </tr>
+                    <tr>
+                      <th>Assign Department: </th>
+                      <td>{{project.assign_dept}}</td>
+                    </tr>
+                    <tr>
+                      <th>Estimate Cost: </th>
+                      <td>{{project.estimate_cost}}</td>
+                    </tr>
+                    <tr>
+                      <th>Actual Cost: </th>
+                      <td>{{project.actual_cost}}</td>
+                    </tr>
+                    <tr>
+                      <th>Date Created: </th>
+                      <td>{{project.dateCreated | date : format}}</td>
+                    </tr>
+                    <tr>
+                      <th>Start Date: </th>
+                      <td>{{project.start_date | date : format}}</td>
+                    </tr>
+                    <tr>
+                      <th>Due Date: </th>
+                      <td>{{project.due_date | date : format}}</td>
+                    </tr>
+                    <tr>
+                      <th>Complete Date: </th>
+                      <td>{{project.complete_date}}</td>
+                    </tr>
+                  </table>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-</div>
