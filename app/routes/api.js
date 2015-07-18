@@ -100,7 +100,7 @@ module.exports = function(app, express, io) {
         return "Due today";
       }
       // Now is in project date range
-      else if (today > start && start != due) {
+      else if (today > start && today < due && start != due) {
         return "In progress";
       }
       // Anything else
