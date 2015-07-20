@@ -1,7 +1,7 @@
 module.exports = {
 
-  "database": "mongodb://localhost:27017/project-database",
-  "port": process.env.PORT || 80,
+  "database": "mongodb://52.27.207.243:27017/project-database",
+  "port": process.env.PORT || 3000,
   "secretKey": "YourSecretKey"
 
 }
