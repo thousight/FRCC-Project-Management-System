@@ -1,16 +1,16 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var ProjectSchema = new Schema ({
+var TaskSchema = new Schema ({
   creatorID: { type: Schema.Types.ObjectId, ref: 'User' },
   creator: { type: String, ref: 'User' },
-  creator_dept: { type: String, ref: 'User' },
+  projectID: String,
   title: String,
-  short_description: String,
   description: String,
-  priority: String,
   status: String,
-  assign_dept: String,
+  assigneeName: String,
+  assigneeID: String,
+  assignee_dept: String,
   estimate_cost: Number,
   actual_cost: Number,
   last_modified_date: Date,
@@ -20,4 +20,4 @@ var ProjectSchema = new Schema ({
   dateCreated: {type: Date, default: Date.now}
 });
 
-module.exports = mongoose.model('Project', ProjectSchema);
+module.exports = mongoose.model('Task', TaskSchema);

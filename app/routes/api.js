@@ -120,6 +120,7 @@ module.exports = function(app, express, io) {
       assign_dept: req.body.assign_dept,
       estimate_cost: req.body.estimate_cost,
       actual_cost: req.body.actual_cost,
+      last_modified_date: req.body.last_modified_date,
       due_date: req.body.due_date,
       start_date: req.body.start_date,
       complete_date: req.body.complete_date,
@@ -142,6 +143,81 @@ module.exports = function(app, express, io) {
         return;
       }
       res.json(project);
+    });
+  });
+  // api for angular
+  api.get('/me', function(req, res) {
+    res.json(req.decoded);
+  });
+
+  //api for tasks handling
+  api.route('/')
+  .post(function(req, res) {
+    // Compare dates to get status
+    var calcStatus = function()　{
+      var now = new Date();
+      var today_obj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      var start_obj = new Date(req.body.start_date);
+      var due_obj = new Date(req.body.due_date);
+      var today = today_obj.getTime();
+      var start = start_obj.getTime();
+      var due = due_obj.getTime();
+      // Now is before task start date
+      if (today < start) {
+        return "Not started";
+      }
+      // Today is task start date and it's not an one-day event
+      else if (today == start && start != due) {
+        return "Starts today";
+      }
+      // Today is task due date or it's an one-day event
+      else if (today == due || start == due) {
+        return "Due today";
+      }
+      // Now is in task date range
+      else if (today > start && today < due && start != due) {
+        return "In progress";
+      }
+      // Anything else
+      else {
+        return "Passed due";
+      }
+    }
+    var task = new Task({
+      creatorID: req.decoded.id,
+      creator: req.decoded.firstname + " " + req.decoded.lastname,
+      projectID: req.body.projectID,
+      title: req.body.title,
+      description: req.body.description,
+      status: calcStatus(),
+      assigneeName: req.body.assigneeName,
+      assigneeID: req.body.assigneeID,
+      assignee_dept: req.body.assignee_dept,
+      estimate_cost: req.body.estimate_cost,
+      actual_cost: req.body.actual_cost,
+      last_modified_date: req.body.last_modified_date,
+      due_date: req.body.due_date,
+      start_date: req.body.start_date,
+      complete_date: req.body.complete_date,
+    });
+    task.save(function(err, newTask) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      io.emit('task', newTask);
+      res.json({
+        message: "New Task Created!"
+      });
+    });
+  })
+  .get(function(req, res) {
+    Task.find( {projectID: req.decoded.projectID}, function(err, task) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(task);
     });
   });
   // api for angular

@@ -3,9 +3,9 @@ angular.module('projectCtrl', ['projectService'])
 .controller('ProjectController', function(Project, socketio) {
   var vm = this;
   Project.all()
-    .success(function(data) {
-      vm.projects = data;
-    })
+  .success(function(data) {
+    vm.projects = data;
+  })
 
   vm.createProject = function() {
 
@@ -21,11 +21,12 @@ angular.module('projectCtrl', ['projectService'])
     // Create project
     vm.message = '';
     Project.create(vm.projectData)
-      .success(function(data) {
-        // Clear up the project
-        vm.projectData = '';
-        vm.message = data.message;
-      })
+    .success(function(data) {
+      // Clear up the project
+      vm.projectData = '';
+      vm.message = data.message;
+      $('#createProject').modal('hide');
+    })
   }
 
   socketio.on('project', function(data) {

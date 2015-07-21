@@ -9,6 +9,9 @@
   <link rel="icon" type="image/png" href="app/views/icon/favicon-32x32.png" sizes="32x32" />
   <link rel="icon" type="image/png" href="app/views/icon/favicon-16x16.png" sizes="16x16" />
 
+  <!-- style.css -->
+  <link href="localhost:3000/app/style.css" rel="stylesheet">
+
   <!-- Bootstrap -->
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
@@ -24,11 +27,13 @@
   <script type="text/javascript" src="app/services/authService.js"></script>
   <script type="text/javascript" src="app/services/userService.js"></script>
   <script type="text/javascript" src="app/services/projectService.js"></script>
+  <script type="text/javascript" src="app/services/taskService.js"></script>
 
   <!-- Controllers -->
   <script type="text/javascript" src="app/controllers/mainCtrl.js"></script>
   <script type="text/javascript" src="app/controllers/userCtrl.js"></script>
   <script type="text/javascript" src="app/controllers/projectCtrl.js"></script>
+  <script type="text/javascript" src="app/controllers/taskCtrl.js"></script>
 
   <!-- Directives -->
   <script type="text/javascript" src="app/directives/reverse.js"></script>
@@ -38,6 +43,7 @@
 
   <!-- app.js -->
   <script type="text/javascript" src="app/app.js"></script>
+
 </head>
 
 <body ng-controller="MainController as main">
@@ -56,6 +62,11 @@
       </div>
     </div>
   </header>
+  <!-- Trigger the modal with a button -->
+  <div class="createProjectbtn">
+    <button ng-if="main.loggedIn" type="button" class="btn btn-info btn-lg pull-right" data-toggle="modal" data-target="#createProject">Create Project</button>
+  </div>
+
 
   <main class="container">
     <div ng-view></div>
