@@ -17,6 +17,11 @@ angular.module('appRoutes', ['ngRoute'])
         }
       }
     })
+    .when('/allUsers', {
+      templateUrl: '/app/views/pages/allUsers.html',
+      controller: 'UserController',
+      controllerAs: 'user'
+    })
 
 
   $locationProvider.html5Mode(true);

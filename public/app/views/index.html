@@ -10,7 +10,7 @@
   <link rel="icon" type="image/png" href="app/views/icon/favicon-16x16.png" sizes="16x16" />
 
   <!-- style.css -->
-  <link href="localhost:3000/app/style.css" rel="stylesheet">
+  <link href="http://localhost:3000/app/style.css" rel="stylesheet">
 
   <!-- Bootstrap -->
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
@@ -62,12 +62,17 @@
       </div>
     </div>
   </header>
-  <!-- Trigger the modal with a button -->
-  <div class="createProjectbtn">
-    <button ng-if="main.loggedIn" type="button" class="btn btn-info btn-lg pull-right" data-toggle="modal" data-target="#createProject">Create Project</button>
-  </div>
 
+  <!-- Tabs -->
+  <div class="container">
+    <ul class="nav nav-tabs nav-justified">
+      <li><a href="/">Your Projects</a></li>
+      <li><a href="/allProjects">All Projects</a></li>
+      <li><a href="/allUsers">All Users</a></li>
+    </ul>
+  </div><br>
 
+  <!-- Main view -->
   <main class="container">
     <div ng-view></div>
   </main>
