@@ -157,8 +157,8 @@ module.exports = function(app, express, io) {
     var calcStatus = function()　{
       var now = new Date();
       var today_obj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      var start_obj = new Date(req.body.start_date);
-      var due_obj = new Date(req.body.due_date);
+      var start_obj = new Date(req.body.taskStart_date);
+      var due_obj = new Date(req.body.taskDue_date);
       var today = today_obj.getTime();
       var start = start_obj.getTime();
       var due = due_obj.getTime();
@@ -183,22 +183,23 @@ module.exports = function(app, express, io) {
         return "Passed due";
       }
     }
+    console.log(req.body.taskProjectID);
     var task = new Task({
       creatorID: req.decoded.id,
       creator: req.decoded.firstname + " " + req.decoded.lastname,
-      projectID: req.body.projectID,
-      title: req.body.title,
-      description: req.body.description,
+      projectID: req.body.taskProjectID,
+      title: req.body.taskTitle,
+      description: req.body.taskDescription,
       status: calcStatus(),
       assigneeName: req.body.assigneeName,
       assigneeID: req.body.assigneeID,
       assignee_dept: req.body.assignee_dept,
-      estimate_cost: req.body.estimate_cost,
-      actual_cost: req.body.actual_cost,
-      last_modified_date: req.body.last_modified_date,
-      due_date: req.body.due_date,
-      start_date: req.body.start_date,
-      complete_date: req.body.complete_date,
+      estimate_cost: req.body.taskEstimate_cost,
+      actual_cost: req.body.TaskActual_cost,
+      last_modified_date: req.body.taskLast_modified_date,
+      due_date: req.body.taskDue_date,
+      start_date: req.body.taskStart_date,
+      complete_date: req.body.taskComplete_date,
     });
     task.save(function(err, newTask) {
       if (err) {

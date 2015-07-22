@@ -1,4 +1,4 @@
-angular.module('taskCtrl', ['taskService'])
+angular.module('taskCtrl', ['taskService', 'projectService'])
 
 .controller('TaskController', function(Task, socketio) {
   var vm = this;
@@ -10,14 +10,12 @@ angular.module('taskCtrl', ['taskService'])
   vm.createTask = function() {
 
     // Wrong due date prevention
-    var start = new Date(vm.taskData.start_date);
-    var due = new Date(vm.taskData.due_date);
-    console.log(start);
+    var start = new Date(vm.taskData.taskStart_date);
+    var due = new Date(vm.taskData.taskDue_date);
     if (start > due) {
       alert("Due date can't be earlier than start date, please decide a new due date.");
       return;
     }
-
     // Create task
     vm.message = '';
     Task.create(vm.taskData)
