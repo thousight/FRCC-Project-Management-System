@@ -3,9 +3,9 @@ angular.module('taskCtrl', ['taskService', 'projectService'])
 .controller('TaskController', function(Task, socketio) {
   var vm = this;
   Task.all()
-    .success(function(data) {
-      vm.tasks = data;
-    })
+  .success(function(data) {
+    vm.tasks = data;
+  })
 
   vm.createTask = function() {
 
@@ -19,11 +19,12 @@ angular.module('taskCtrl', ['taskService', 'projectService'])
     // Create task
     vm.message = '';
     Task.create(vm.taskData)
-      .success(function(data) {
-        // Clear up the task
-        vm.taskData = '';
-        vm.message = data.message;
-      })
+    .success(function(data) {
+      // Clear up the task
+      vm.taskData = '';
+      vm.message = data.message;
+      $('#createTask').modal('hide');
+    })
   }
 
   socketio.on('task', function(data) {
