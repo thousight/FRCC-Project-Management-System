@@ -14,6 +14,20 @@ angular.module('projectService', [])
   return projectFactory;
 })
 
+.factory('Task', function($http) {
+  var taskFactory = {};
+  taskFactory.create = function(taskData) {
+    return $http.post('/api', taskData);
+  }
+  taskFactory.allTasks = function() {
+    return $http.get('/api/all_tasks');
+  }
+  taskFactory.all = function() {
+    return $http.get('/api');
+  }
+  return taskFactory;
+})
+
 .factory('socketio', function($rootScope) {
   var socket = io.connect();
   return {

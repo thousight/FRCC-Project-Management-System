@@ -145,11 +145,7 @@ module.exports = function(app, express, io) {
       res.json(project);
     });
   });
-  // api for angular
-  api.get('/me', function(req, res) {
-    res.json(req.decoded);
-  });
-
+  
   //api for tasks handling
   api.route('/')
   .post(function(req, res) {
@@ -206,7 +202,7 @@ module.exports = function(app, express, io) {
         res.send(err);
         return;
       }
-      io.emit('task', newTask);
+      io.emit('tasks', newTask);
       res.json({
         message: "New Task Created!"
       });
