@@ -27,6 +27,7 @@
 
 <div class="row" ng-if="main.loggedIn">
   <div ng-controller="ProjectController as project">
+
     <!-- Modal for Creating Project -->
     <div id="createProject" class="modal fade" role="dialog">
       <div class="modal-dialog">
@@ -106,6 +107,7 @@
         <div class="col-md-2">
 
         </div>
+
         <div class="panel col-md-8">
           <!-- Project heading setup -->
           <div class="panel-group" ng-repeat="eachProject in project.projects | reverse track by $index">
@@ -120,6 +122,7 @@
                       {{eachProject.complete_pct}}
                     </div>
                   </div>
+
                   <!-- Project function button group -->
                   <div class="text-center">
                     <div class="btn-group btn-group-justified" role="group" aria-label="projectFunctions">
@@ -147,6 +150,7 @@
 
                     </div>
                   </div><br>
+
                   <!-- Project detail table -->
                   <table class="table table-responsive table-bordered table-hover">
                     <tr>
@@ -208,6 +212,7 @@
                               {{eachTask.complete_pct}}
                             </div>
                           </div>
+
                           <!-- Task function button group -->
                           <div class="text-center">
                             <div class="btn-group btn-group-justified" role="group" aria-label="taskFunctions">
@@ -234,6 +239,7 @@
 
                             </div>
                           </div><br>
+
                           <!-- Task detail table -->
                           <table class="table table-responsive table-bordered table-hover">
                             <tr>
@@ -291,9 +297,11 @@
                   </div>
                 </div>
               </div>
+
               <div class="col-md-2">
 
               </div>
+
             </div>
           </div>
 

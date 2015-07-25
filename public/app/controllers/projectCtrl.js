@@ -30,6 +30,7 @@ angular.module('projectCtrl', ['projectService'])
     if (confirm("Are you sure you want to delete this project? If you do, all related tasks and followups will also be deleted.")) {
       Project.deleteProject(id);
       Task.deleteTask(id);
+      location.reload();
     } else {
       return;
     }
@@ -50,6 +51,7 @@ angular.module('projectCtrl', ['projectService'])
     }
     // Create task
     vm.message = '';
+    console.log(vm.taskData.taskTitle);
     Task.create(vm.taskData)
     .success(function(data) {
       // Clear up the task

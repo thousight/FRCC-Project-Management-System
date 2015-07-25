@@ -58,7 +58,7 @@ module.exports = function(app, express, io) {
     });
   });
 
-  //middleware
+  // middleware
   api.use(function(req, res, next) {
     console.log("Somebody just logged in!");
     var token = req.body.token || req.param('token') || req.headers['x-access-token'];
@@ -76,7 +76,7 @@ module.exports = function(app, express, io) {
     }
   });
 
-  //api for projects handling
+  // api for projects creation
   api.route('/')
   .post(function(req, res) {
     // Compare dates to get status
@@ -147,7 +147,17 @@ module.exports = function(app, express, io) {
     });
   });
 
-  //api for tasks handling
+  // deleteProject api
+  api.post('/deleteProject', function(req, res) {
+    Project.remove({ _id: req.body.id }, function(err) {
+      if (err){
+        res.send(err);
+        return;
+      }
+    });
+  })
+
+  // api for tasks creation
   api.route('/')
   .post(function(req, res) {
     // Compare dates to get status
@@ -218,14 +228,6 @@ module.exports = function(app, express, io) {
       res.json(task);
     });
   });
-
-  // deleteProject api
-  api.post('/deleteProject', function(req, res) {
-    Project.remove({ _id: req.body.id }, function(err) {
-      res.send(err);
-      return;
-    });
-  })
 
   // deleteTask api
   api.post('/deleteTask', function(req, res) {
