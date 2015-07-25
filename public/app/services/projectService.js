@@ -11,6 +11,9 @@ angular.module('projectService', [])
   projectFactory.all = function() {
     return $http.get('/api');
   }
+  projectFactory.deleteProject = function(id) {
+    return $http.post('/api/deleteProject', {id: id});
+  }
   return projectFactory;
 })
 
@@ -24,6 +27,9 @@ angular.module('projectService', [])
   }
   taskFactory.all = function() {
     return $http.get('/api');
+  }
+  taskFactory.deleteTask = function(id) {
+    return $http.post('/api/deleteTask', {projectID: id});
   }
   return taskFactory;
 })

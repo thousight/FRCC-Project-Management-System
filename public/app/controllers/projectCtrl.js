@@ -26,6 +26,15 @@ angular.module('projectCtrl', ['projectService'])
     })
   }
 
+  vm.deleteProject = function(id) {
+    if (confirm("Are you sure you want to delete this project? If you do, all related tasks and followups will also be deleted.")) {
+      Project.deleteProject(id);
+      Task.deleteTask(id);
+    } else {
+      return;
+    }
+  }
+
   Task.all()
   .success(function(data) {
     vm.tasks = data;
@@ -50,8 +59,19 @@ angular.module('projectCtrl', ['projectService'])
     })
   }
 
-  socketio.on('project', 'task', function(data) {
+  vm.deleteTask = function(id) {
+    if (confirm("Are you sure you want to delete this task? If you do, all related followups will also be deleted.")) {
+      console.log(id);
+      Task.deleteTask(id);
+    } else {
+      return;
+    }
+  }
+
+  socketio.on('project', function(data) {
     vm.projects.push(data);
+  })
+  socketio.on('task', function(data) {
     vm.tasks.push(data);
   })
 

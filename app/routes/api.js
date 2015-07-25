@@ -1,5 +1,6 @@
 var User = require('../models/user');
 var Project = require('../models/project');
+var Task = require('../models/task');
 var config = require('../../config');
 var secretKey = config.secretKey;
 var jsonwebtoken = require('jsonwebtoken');
@@ -145,7 +146,7 @@ module.exports = function(app, express, io) {
       res.json(project);
     });
   });
-  
+
   //api for tasks handling
   api.route('/')
   .post(function(req, res) {
@@ -209,7 +210,7 @@ module.exports = function(app, express, io) {
     });
   })
   .get(function(req, res) {
-    Task.find( {projectID: req.decoded.projectID}, function(err, task) {
+    Task.find( {projectID: req.decoded.id}, function(err, task) {
       if (err) {
         res.send(err);
         return;
@@ -217,6 +218,25 @@ module.exports = function(app, express, io) {
       res.json(task);
     });
   });
+
+  // deleteProject api
+  api.post('/deleteProject', function(req, res) {
+    Project.remove({ _id: req.body.id }, function(err) {
+      res.send(err);
+      return;
+    });
+  })
+
+  // deleteTask api
+  api.post('/deleteTask', function(req, res) {
+    Task.remove({ projectID: req.body.id }, function(err) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+    });
+  })
+
   // api for angular
   api.get('/me', function(req, res) {
     res.json(req.decoded);

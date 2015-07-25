@@ -27,8 +27,7 @@ angular.module('mainCtrl', [])
           $location.path('/');
           location.reload();
         } else {
-          vm.error = data.message;
-          alert(vm.error);
+          alert(data.message);
         }
       })
   }
