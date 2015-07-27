@@ -4,7 +4,7 @@ var Task = require('../models/task');
 var config = require('../../config');
 var secretKey = config.secretKey;
 var jsonwebtoken = require('jsonwebtoken');
-var fields = 'frcc_member_id username password cname firstname lastname contact_phone cell_phone email street city state zip country isMale status selected frcc_member frcc_family_id family_relation marital_status main_language christian primary_group frcc_familyserve zone_leader_id groups dob first_sunday salvation baptize discount_code frtc_teacher frtc_registered frtc_eschool frtc_equipping pm_role created_date update_date update_person department division organization';
+var fields = 'frcc_member_id username password firstname lastname department cname contact_phone cell_phone email street city state zip country isMale status selected frcc_member frcc_family_id family_relation marital_status main_language christian primary_group frcc_familyserve zone_leader_id groups dob first_sunday salvation baptize discount_code frtc_teacher frtc_registered frtc_eschool frtc_equipping pm_role created_date update_date update_person division organization';
 
 // Create tokens for users with jsonwebtoken
 function createToken(user) {
@@ -12,7 +12,8 @@ function createToken(user) {
     id: user._id,
     firstname: user.firstname,
     lastname: user.lastname,
-    username: user.username
+    username: user.username,
+    department: user.department
   }, secretKey, {
     expirtesInMinute: 1440
   });
@@ -50,7 +51,7 @@ module.exports = function(app, express, io) {
           var token = createToken(user);
           res.json({
             success: true,
-            message: "Login Successfully !",
+            message: "Login Successfully!",
             token: token
           });
         }
@@ -58,15 +59,16 @@ module.exports = function(app, express, io) {
     });
   });
 
-  // middleware
+  // middleware for verifying token
   api.use(function(req, res, next) {
-    console.log("Somebody just logged in!");
+    console.log("Somebody just logged in! Verifying token!");
     var token = req.body.token || req.param('token') || req.headers['x-access-token'];
     if (token) {
       jsonwebtoken.verify(token, secretKey, function(err, decoded) {
         if (err) {
           res.status(403).send({success: false, message: "Failed to authenticate user."});
         } else {
+          console.log("Token verified!");
           req.decoded = decoded;
           next();
         }
@@ -239,9 +241,10 @@ module.exports = function(app, express, io) {
     });
   })
 
-  // api for angular
+  // api for getUser
   api.get('/me', function(req, res) {
     res.json(req.decoded);
   });
+
   return api;
 }

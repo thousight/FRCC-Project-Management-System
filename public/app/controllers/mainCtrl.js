@@ -25,6 +25,7 @@ angular.module('mainCtrl', [])
           });
         if(data.success) {
           $location.path('/');
+          console.log(vm.loginData.department + " mainCtrl");
           location.reload();
         } else {
           alert(data.message);
