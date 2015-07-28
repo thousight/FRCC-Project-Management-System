@@ -1,14 +1,13 @@
-angular.module('taskCtrl', ['taskService', 'projectService'])
+angular.module('taskCtrl', ['projectService'])
 
 .controller('TaskController', function(Task, socketio) {
   var vm = this;
-  Task.all()
+  Task.getTasks()
   .success(function(data) {
     vm.tasks = data;
   })
 
-  vm.createTask = function() {
-
+  vm.createTask = function(ProjectID) {
     // Wrong due date prevention
     var start = new Date(vm.taskData.taskStart_date);
     var due = new Date(vm.taskData.taskDue_date);
@@ -16,15 +15,27 @@ angular.module('taskCtrl', ['taskService', 'projectService'])
       alert("Due date can't be earlier than start date, please decide a new due date.");
       return;
     }
+    console.log(ProjectID + " createTask");
+    vm.taskData.taskProjectID = ProjectID;
     // Create task
     vm.message = '';
+    console.log(vm.taskData.taskTitle);
     Task.create(vm.taskData)
     .success(function(data) {
       // Clear up the task
       vm.taskData = '';
       vm.message = data.message;
-      $('#createTask').modal('hide');
+      $('#createTask{{$index}}').modal('hide');
     })
+  }
+
+  vm.deleteTask = function(id) {
+    if (confirm("Are you sure you want to delete this task? If you do, all related followups will also be deleted.")) {
+      console.log(id);
+      Task.deleteTask(id);
+    } else {
+      return;
+    }
   }
 
   socketio.on('task', function(data) {

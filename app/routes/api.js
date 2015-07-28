@@ -23,6 +23,7 @@ function createToken(user) {
 module.exports = function(app, express, io) {
   var api = express.Router();
 
+  // All Projects api
   api.get('/all_projects', function(req, res) {
     Project.find({}, function(err, projects) {
       if (err) {
@@ -61,14 +62,12 @@ module.exports = function(app, express, io) {
 
   // middleware for verifying token
   api.use(function(req, res, next) {
-    console.log("Somebody just logged in! Verifying token!");
     var token = req.body.token || req.param('token') || req.headers['x-access-token'];
     if (token) {
       jsonwebtoken.verify(token, secretKey, function(err, decoded) {
         if (err) {
           res.status(403).send({success: false, message: "Failed to authenticate user."});
         } else {
-          console.log("Token verified!");
           req.decoded = decoded;
           next();
         }
@@ -78,8 +77,8 @@ module.exports = function(app, express, io) {
     }
   });
 
-  // api for projects creation
-  api.route('/')
+  // api for projects creation and retrieval
+  api.route('/projects')
   .post(function(req, res) {
     // Compare dates to get status
     var calcStatus = function()　{
@@ -159,8 +158,8 @@ module.exports = function(app, express, io) {
     });
   })
 
-  // api for tasks creation
-  api.route('/')
+  // api for tasks creation and retrieval
+  api.route('/tasks')
   .post(function(req, res) {
     // Compare dates to get status
     var calcStatus = function()　{
@@ -222,7 +221,7 @@ module.exports = function(app, express, io) {
     });
   })
   .get(function(req, res) {
-    Task.find( {projectID: req.decoded.id}, function(err, task) {
+    Task.find( {creatorID: req.decoded.id}, function(err, task) {
       if (err) {
         res.send(err);
         return;

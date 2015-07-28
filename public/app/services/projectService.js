@@ -3,13 +3,13 @@ angular.module('projectService', [])
 .factory('Project', function($http) {
   var projectFactory = {};
   projectFactory.create = function(projectData) {
-    return $http.post('/api', projectData);
+    return $http.post('/api/projects', projectData);
   }
   projectFactory.allProjects = function() {
     return $http.get('/api/all_projects');
   }
-  projectFactory.all = function() {
-    return $http.get('/api');
+  projectFactory.getProjects = function() {
+    return $http.get('/api/projects');
   }
   projectFactory.deleteProject = function(id) {
     return $http.post('/api/deleteProject', {id: id});
@@ -20,13 +20,13 @@ angular.module('projectService', [])
 .factory('Task', function($http) {
   var taskFactory = {};
   taskFactory.create = function(taskData) {
-    return $http.post('/api', taskData);
+    return $http.post('/api/tasks', taskData);
   }
   taskFactory.allTasks = function() {
     return $http.get('/api/all_tasks');
   }
-  taskFactory.all = function() {
-    return $http.get('/api');
+  taskFactory.getTasks = function() {
+    return $http.get('/api/tasks');
   }
   taskFactory.deleteTask = function(id) {
     return $http.post('/api/deleteTask', {projectID: id});
