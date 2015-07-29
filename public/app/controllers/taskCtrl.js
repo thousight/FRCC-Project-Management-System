@@ -15,24 +15,23 @@ angular.module('taskCtrl', ['projectService'])
       alert("Due date can't be earlier than start date, please decide a new due date.");
       return;
     }
-    console.log(ProjectID + " createTask");
     vm.taskData.taskProjectID = ProjectID;
     // Create task
     vm.message = '';
-    console.log(vm.taskData.taskTitle);
     Task.create(vm.taskData)
     .success(function(data) {
       // Clear up the task
       vm.taskData = '';
       vm.message = data.message;
-      $('#createTask{{$index}}').modal('hide');
+      var modalName = '#createTask' + ProjectID;
+      $(modalName).modal('hide');
     })
   }
 
-  vm.deleteTask = function(id) {
+  vm.deleteOneTask = function(id) {
     if (confirm("Are you sure you want to delete this task? If you do, all related followups will also be deleted.")) {
-      console.log(id);
-      Task.deleteTask(id);
+      Task.deleteOneTask(id);
+      location.reload();
     } else {
       return;
     }

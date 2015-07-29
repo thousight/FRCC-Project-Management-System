@@ -1,150 +1,157 @@
-<div class="row"  ng-if="main.loggedIn">
-  <div ng-controller="AllTasksController as task">
-    <div class="row">
+<div class="row" ng-if="main.loggedIn">
+  <div ng-controller="AllProjectsController as project">
+    <div ng-controller="AllTasksController as task">
 
       <div class="col-md-2">
 
       </div>
+
       <div class="panel col-md-8">
+
         <!-- Project heading setup -->
-        <div class="panel-group" ng-repeat="project in project.projects | reverse">
-          <div class="panel panel-info">
-            <div class="panel-heading" data-toggle="collapse" ng-click="true" data-target="#projectDetails{{$index}}" href="#projectDetails{{$index}}">
-              <h4><span class="glyphicon glyphicon-briefcase"></span> {{project.title}}: {{project.short_description}}</h4>
-            </div>
-            <div class="panel-collapse collapse out" id="projectDetails{{$index}}">
-              <p class="panel-body">
-                <div class="progress">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="{{project.complete_pct}}" aria-valuemin="0" aria-valuemax="100" stype="width=60%">
-                    {{project.complete_pct}}
-                  </div>
+        <div class="panel-group" ng-repeat="eachProject in project.projects | orderBy:$index:true track by $index">
+
+              <div class="panel panel-info">
+                <div class="panel-heading" data-toggle="collapse" ng-click="true" data-target="#projectDetails{{$index}}" href="#projectDetails{{$index}}">
+                  <h4><span class="glyphicon glyphicon-briefcase"></span> {{eachProject.title}}: {{eachProject.short_description}}</h4>
                 </div>
-
-                <!-- Project detail table -->
-                <table class="table table-responsive table-bordered table-hover">
-                  <tr>
-                    <th>Created by: </th>
-                    <td>{{project.creator}}</td>
-                  </tr>
-                  <tr>
-                    <th>Creator Department: </th>
-                    <td>{{project.creator_dept}}</td>
-                  </tr>
-                  <tr>
-                    <th>Description: </th>
-                    <td>{{project.description}}</td>
-                  </tr>
-                  <tr>
-                    <th>Priority: </th>
-                    <td>{{project.priority}}</td>
-                  </tr>
-                  <tr>
-                    <th>Assign Department: </th>
-                    <td>{{project.assign_dept}}</td>
-                  </tr>
-                  <tr>
-                    <th>Estimate Cost: </th>
-                    <td>{{project.estimate_cost}}</td>
-                  </tr>
-                  <tr>
-                    <th>Actual Cost: </th>
-                    <td>{{project.actual_cost}}</td>
-                  </tr>
-                  <tr>
-                    <th>Date Created: </th>
-                    <td>{{project.dateCreated | date : format}}</td>
-                  </tr>
-                  <tr>
-                    <th>Start Date: </th>
-                    <td>{{project.start_date | date : format}}</td>
-                  </tr>
-                  <tr>
-                    <th>Due Date: </th>
-                    <td>{{project.due_date | date : format}}  <span class="label label-info">{{project.status}}</span></td>
-                  </tr>
-                  <tr>
-                    <th>Complete Date: </th>
-                    <td>{{project.complete_date}}</td>
-                  </tr>
-                </table>
-
-                <!-- Task heading setup -->
-                <div class="panel-group" ng-repeat="task in task.tasks | reverse">
-                  <div class="panel panel-success">
-                    <div class="panel-heading" data-toggle="collapse" ng-click="true" data-target="#taskDetails{{$index}}" href="#taskDetails{{$index}}">
-                      <h5><span class="glyphicon glyphicon-tasks"></span> {{task.title}}</h5>
-                    </div>
-                    <div class="panel-collapse collapse out" id="taskDetails{{$index}}">
-                      <p class="panel-body">
-                        <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="{{task.complete_pct}}" aria-valuemin="0" aria-valuemax="100" stype="width=60%">
-                            {{task.complete_pct}}
-                          </div>
-                        </div>
-
-                        <!-- Task detail table -->
-                        <table class="table table-responsive table-bordered table-hover">
-                          <tr>
-                            <th>Created by: </th>
-                            <td>{{task.creator}}</td>
-                          </tr>
-                          <tr>
-                            <th>Creator Department: </th>
-                            <td>{{task.creator_dept}}</td>
-                          </tr>
-                          <tr>
-                            <th>Description: </th>
-                            <td>{{task.description}}</td>
-                          </tr>
-                          <tr>
-                            <th>Assignee: </th>
-                            <td>{{task.assigneeName}}</td>
-                          </tr>
-                          <tr>
-                            <th>Assignee Department: </th>
-                            <td>{{task.assignee_dept}}</td>
-                          </tr>
-                          <tr>
-                            <th>Estimate Cost: </th>
-                            <td>{{task.estimate_cost}}</td>
-                          </tr>
-                          <tr>
-                            <th>Actual Cost: </th>
-                            <td>{{task.actual_cost}}</td>
-                          </tr>
-                          <tr>
-                            <th>Last Modified: </th>
-                            <td>{{task.last_modified_date | date : format}}</td>
-                          </tr>
-                          <tr>
-                            <th>Date Created: </th>
-                            <td>{{task.dateCreated | date : format}}</td>
-                          </tr>
-                          <tr>
-                            <th>Start Date: </th>
-                            <td>{{task.start_date | date : format}}</td>
-                          </tr>
-                          <tr>
-                            <th>Due Date: </th>
-                            <td>{{task.due_date | date : format}}  <span class="label label-success">{{task.status}}</span></td>
-                          </tr>
-                          <tr>
-                            <th>Complete Date: </th>
-                            <td>{{task.complete_date}}</td>
-                          </tr>
-                        </table>
+                <div class="panel-collapse collapse out" id="projectDetails{{$index}}">
+                  <p class="panel-body">
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="{{eachProject.complete_pct}}" aria-valuemin="0" aria-valuemax="100" stype="width=60%">
+                        {{eachProject.complete_pct}}
                       </div>
-                    </p>
-                  </div>
+                    </div>
+
+                    <!-- Project detail table -->
+                    <table class="table table-responsive table-bordered table-hover">
+                      <tr>
+                        <th>Created by: </th>
+                        <td>{{eachProject.creator}}</td>
+                      </tr>
+                      <tr>
+                        <th>Creator Department: </th>
+                        <td>{{eachProject.creator_dept}}</td>
+                      </tr>
+                      <tr>
+                        <th>Description: </th>
+                        <td>{{eachProject.description}}</td>
+                      </tr>
+                      <tr>
+                        <th>Priority: </th>
+                        <td>{{eachProject.priority}}</td>
+                      </tr>
+                      <tr>
+                        <th>Assign Department: </th>
+                        <td>{{eachProject.assign_dept}}</td>
+                      </tr>
+                      <tr>
+                        <th>Estimate Cost: </th>
+                        <td>{{eachProject.estimate_cost}}</td>
+                      </tr>
+                      <tr>
+                        <th>Actual Cost: </th>
+                        <td>{{eachProject.actual_cost}}</td>
+                      </tr>
+                      <tr>
+                        <th>Date Created: </th>
+                        <td>{{eachProject.dateCreated | date : format}}</td>
+                      </tr>
+                      <tr>
+                        <th>Start Date: </th>
+                        <td>{{eachProject.start_date | date : format}}</td>
+                      </tr>
+                      <tr>
+                        <th>Due Date: </th>
+                        <td>{{eachProject.due_date | date : format}}  <span class="label label-info">{{eachProject.status}}</span></td>
+                      </tr>
+                      <tr>
+                        <th>Complete Date: </th>
+                        <td>{{eachProject.complete_date}}</td>
+                      </tr>
+                    </table>
+
+                    <br>
+
+                    <!-- Task heading setup -->
+                    <div class="panel-group" ng-repeat="eachTask in task.tasks | filter: { taskProjectID: eachProject._id }">
+
+                      <div class="panel panel-success">
+                        <div class="panel-heading" data-toggle="collapse" ng-click="true" data-target="#taskDetails{{$index}}" href="#taskDetails{{$index}}">
+                          <h5><span class="glyphicon glyphicon-tasks"></span> {{eachTask.title}}</h5>
+                        </div>
+                        <div class="panel-collapse collapse out" id="taskDetails{{$index}}">
+                          <p class="panel-body">
+                            <div class="progress">
+                              <div class="progress-bar" role="progressbar" aria-valuenow="{{task.complete_pct}}" aria-valuemin="0" aria-valuemax="100" stype="width=60%">
+                                {{eachTask.complete_pct}}
+                              </div>
+                            </div>
+
+                            <!-- Task detail table -->
+                            <table class="table table-responsive table-bordered table-hover">
+                              <tr>
+                                <th>Created by: </th>
+                                <td>{{eachTask.creator}}</td>
+                              </tr>
+                              <tr>
+                                <th>Creator Department: </th>
+                                <td>{{eachTask.creator_dept}}</td>
+                              </tr>
+                              <tr>
+                                <th>Description: </th>
+                                <td>{{eachTask.description}}</td>
+                              </tr>
+                              <tr>
+                                <th>Assignee: </th>
+                                <td>{{eachTask.assigneeName}}</td>
+                              </tr>
+                              <tr>
+                                <th>Assignee Department: </th>
+                                <td>{{eachTask.assignee_dept}}</td>
+                              </tr>
+                              <tr>
+                                <th>Estimate Cost: </th>
+                                <td>{{eachTask.estimate_cost}}</td>
+                              </tr>
+                              <tr>
+                                <th>Actual Cost: </th>
+                                <td>{{eachTask.actual_cost}}</td>
+                              </tr>
+                              <tr>
+                                <th>Last Modified: </th>
+                                <td>{{eachTask.last_modified_date | date : format}}</td>
+                              </tr>
+                              <tr>
+                                <th>Date Created: </th>
+                                <td>{{eachTask.dateCreated | date : format}}</td>
+                              </tr>
+                              <tr>
+                                <th>Start Date: </th>
+                                <td>{{eachTask.start_date | date : format}}</td>
+                              </tr>
+                              <tr>
+                                <th>Due Date: </th>
+                                <td>{{eachTask.due_date | date : format}}  <span class="label label-success">{{eachTask.status}}</span></td>
+                              </tr>
+                              <tr>
+                                <th>Complete Date: </th>
+                                <td>{{eachTask.complete_date | date : format}}</td>
+                              </tr>
+                            </table>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </p>
                 </div>
-              </p>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2">
+          <div class="col-md-2">
 
-    </div>
-  </div>
-</div>
+          </div>
+
+        </div>

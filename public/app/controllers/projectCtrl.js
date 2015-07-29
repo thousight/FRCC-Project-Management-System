@@ -31,7 +31,7 @@ angular.module('projectCtrl', ['projectService'])
   vm.deleteProject = function(id) {
     if (confirm("Are you sure you want to delete this project? If you do, all related tasks and followups will also be deleted.")) {
       Project.deleteProject(id);
-      Task.deleteTask(id);
+      Task.deleteAllTasks(id);
       location.reload();
     } else {
       return;

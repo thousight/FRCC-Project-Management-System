@@ -34,6 +34,17 @@ module.exports = function(app, express, io) {
     })
   })
 
+  // All Projects api
+  api.get('/all_tasks', function(req, res) {
+    Task.find({}, function(err, tasks) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(tasks);
+    })
+  })
+
   // login api
   api.post('/login', function(req, res) {
     User.findOne({
@@ -191,11 +202,10 @@ module.exports = function(app, express, io) {
         return "Passed due";
       }
     }
-    console.log(req.body.taskProjectID);
     var task = new Task({
       creatorID: req.decoded.id,
       creator: req.decoded.firstname + " " + req.decoded.lastname,
-      projectID: req.body.taskProjectID,
+      taskProjectID: req.body.taskProjectID,
       title: req.body.taskTitle,
       description: req.body.taskDescription,
       status: calcStatus(),
@@ -230,9 +240,19 @@ module.exports = function(app, express, io) {
     });
   });
 
-  // deleteTask api
-  api.post('/deleteTask', function(req, res) {
-    Task.remove({ projectID: req.body.id }, function(err) {
+  // deleteAllTask api
+  api.post('/deleteAllTasks', function(req, res) {
+    Task.remove({ taskProjectID: req.body.projectID }, function(err) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+    });
+  })
+
+  // deleteOneTask api
+  api.post('/deleteOneTask', function(req, res) {
+    Task.remove({ _id: req.body.id }, function(err) {
       if (err) {
         res.send(err);
         return;

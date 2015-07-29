@@ -28,8 +28,11 @@ angular.module('projectService', [])
   taskFactory.getTasks = function() {
     return $http.get('/api/tasks');
   }
-  taskFactory.deleteTask = function(id) {
-    return $http.post('/api/deleteTask', {projectID: id});
+  taskFactory.deleteAllTasks = function(id) {
+    return $http.post('/api/deleteAllTasks', {projectID: id});
+  }
+  taskFactory.deleteOneTask = function(id) {
+    return $http.post('/api/deleteOneTask', {id: id});
   }
   return taskFactory;
 })
