@@ -37,6 +37,26 @@ angular.module('projectService', [])
   return taskFactory;
 })
 
+.factory('Followup', function($http) {
+  var followupFactory = {};
+  followupFactory.create = function(followupData) {
+    return $http.post('/api/followups', followupData);
+  }
+  followupFactory.allFollowups = function() {
+    return $http.get('/api/all_followups');
+  }
+  followupFactory.getFollowups = function() {
+    return $http.get('/api/followups');
+  }
+  followupFactory.deleteAllFollowups = function(id) {
+    return $http.post('/api/deleteAllFollowups', {taskID: id});
+  }
+  followupFactory.deleteOneFollowup = function(id) {
+    return $http.post('/api/deleteOneFollowup', {id: id});
+  }
+  return followupFactory;
+})
+
 .factory('socketio', function($rootScope) {
   var socket = io.connect();
   return {

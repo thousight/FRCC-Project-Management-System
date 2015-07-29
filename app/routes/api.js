@@ -1,6 +1,7 @@
 var User = require('../models/user');
 var Project = require('../models/project');
 var Task = require('../models/task');
+var Followup = require('../models/followup');
 var config = require('../../config');
 var secretKey = config.secretKey;
 var jsonwebtoken = require('jsonwebtoken');
@@ -34,7 +35,7 @@ module.exports = function(app, express, io) {
     })
   })
 
-  // All Projects api
+  // All Tasks api
   api.get('/all_tasks', function(req, res) {
     Task.find({}, function(err, tasks) {
       if (err) {
@@ -252,6 +253,58 @@ module.exports = function(app, express, io) {
 
   // deleteOneTask api
   api.post('/deleteOneTask', function(req, res) {
+    Task.remove({ _id: req.body.id }, function(err) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+    });
+  })
+
+  // api for followups creation and retrieval
+  api.route('/followups')
+  .post(function(req, res) {
+    var followup = new Followup({
+      creatorID: req.decoded.id,
+      creator: req.decoded.firstname + " " + req.decoded.lastname,
+      followupTaskID: req.body.followupTaskID,
+      title: req.body.taskTitle,
+      description: req.body.taskDescription,
+      last_modified_date: req.body.taskLast_modified_date
+    });
+    followup.save(function(err, newFollowup) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      io.emit('followups', newFollowup);
+      res.json({
+        message: "New Followup Created!"
+      });
+    });
+  })
+  .get(function(req, res) {
+    Followup.find( {creatorID: req.decoded.id}, function(err, followup) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(followup);
+    });
+  });
+
+  // deleteAllFollowups api
+  api.post('/deleteAllFollowups', function(req, res) {
+    Task.remove({ followupTaskID: req.body.taskID }, function(err) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+    });
+  })
+
+  // deleteOneFollowup api
+  api.post('/deleteOneFollowup', function(req, res) {
     Task.remove({ _id: req.body.id }, function(err) {
       if (err) {
         res.send(err);
