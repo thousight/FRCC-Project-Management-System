@@ -210,7 +210,7 @@ var UserSchema = new Schema ({
 
   department: {
     type: String,
-    required: false
+    required: true
   },
 
   division: {

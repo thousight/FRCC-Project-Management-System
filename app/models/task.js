@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var TaskSchema = new Schema ({
   creatorID: { type: Schema.Types.ObjectId, ref: 'User' },
   creator: { type: String, ref: 'User' },
-  projectID: String,
+  taskProjectID: Schema.Types.ObjectId,
   title: String,
   description: String,
   status: String,

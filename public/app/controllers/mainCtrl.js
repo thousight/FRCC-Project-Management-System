@@ -25,10 +25,10 @@ angular.module('mainCtrl', [])
           });
         if(data.success) {
           $location.path('/');
+          console.log(vm.loginData.department + " mainCtrl");
           location.reload();
         } else {
-          vm.error = data.message;
-          alert(vm.error);
+          alert(data.message);
         }
       })
   }

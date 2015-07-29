@@ -1,9 +1,10 @@
 var User = require('../models/user');
 var Project = require('../models/project');
+var Task = require('../models/task');
 var config = require('../../config');
 var secretKey = config.secretKey;
 var jsonwebtoken = require('jsonwebtoken');
-var fields = 'frcc_member_id username password cname firstname lastname contact_phone cell_phone email street city state zip country isMale status selected frcc_member frcc_family_id family_relation marital_status main_language christian primary_group frcc_familyserve zone_leader_id groups dob first_sunday salvation baptize discount_code frtc_teacher frtc_registered frtc_eschool frtc_equipping pm_role created_date update_date update_person department division organization';
+var fields = 'frcc_member_id username password firstname lastname department cname contact_phone cell_phone email street city state zip country isMale status selected frcc_member frcc_family_id family_relation marital_status main_language christian primary_group frcc_familyserve zone_leader_id groups dob first_sunday salvation baptize discount_code frtc_teacher frtc_registered frtc_eschool frtc_equipping pm_role created_date update_date update_person division organization';
 
 // Create tokens for users with jsonwebtoken
 function createToken(user) {
@@ -11,7 +12,8 @@ function createToken(user) {
     id: user._id,
     firstname: user.firstname,
     lastname: user.lastname,
-    username: user.username
+    username: user.username,
+    department: user.department
   }, secretKey, {
     expirtesInMinute: 1440
   });
@@ -21,6 +23,7 @@ function createToken(user) {
 module.exports = function(app, express, io) {
   var api = express.Router();
 
+  // All Projects api
   api.get('/all_projects', function(req, res) {
     Project.find({}, function(err, projects) {
       if (err) {
@@ -28,6 +31,17 @@ module.exports = function(app, express, io) {
         return;
       }
       res.json(projects);
+    })
+  })
+
+  // All Projects api
+  api.get('/all_tasks', function(req, res) {
+    Task.find({}, function(err, tasks) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(tasks);
     })
   })
 
@@ -49,7 +63,7 @@ module.exports = function(app, express, io) {
           var token = createToken(user);
           res.json({
             success: true,
-            message: "Login Successfully !",
+            message: "Login Successfully!",
             token: token
           });
         }
@@ -57,9 +71,8 @@ module.exports = function(app, express, io) {
     });
   });
 
-  //middleware
+  // middleware for verifying token
   api.use(function(req, res, next) {
-    console.log("Somebody just logged in!");
     var token = req.body.token || req.param('token') || req.headers['x-access-token'];
     if (token) {
       jsonwebtoken.verify(token, secretKey, function(err, decoded) {
@@ -75,8 +88,8 @@ module.exports = function(app, express, io) {
     }
   });
 
-  //api for projects handling
-  api.route('/')
+  // api for projects creation and retrieval
+  api.route('/projects')
   .post(function(req, res) {
     // Compare dates to get status
     var calcStatus = function()　{
@@ -145,13 +158,19 @@ module.exports = function(app, express, io) {
       res.json(project);
     });
   });
-  // api for angular
-  api.get('/me', function(req, res) {
-    res.json(req.decoded);
-  });
 
-  //api for tasks handling
-  api.route('/')
+  // deleteProject api
+  api.post('/deleteProject', function(req, res) {
+    Project.remove({ _id: req.body.id }, function(err) {
+      if (err){
+        res.send(err);
+        return;
+      }
+    });
+  })
+
+  // api for tasks creation and retrieval
+  api.route('/tasks')
   .post(function(req, res) {
     // Compare dates to get status
     var calcStatus = function()　{
@@ -183,11 +202,10 @@ module.exports = function(app, express, io) {
         return "Passed due";
       }
     }
-    console.log(req.body.taskProjectID);
     var task = new Task({
       creatorID: req.decoded.id,
       creator: req.decoded.firstname + " " + req.decoded.lastname,
-      projectID: req.body.taskProjectID,
+      taskProjectID: req.body.taskProjectID,
       title: req.body.taskTitle,
       description: req.body.taskDescription,
       status: calcStatus(),
@@ -206,14 +224,14 @@ module.exports = function(app, express, io) {
         res.send(err);
         return;
       }
-      io.emit('task', newTask);
+      io.emit('tasks', newTask);
       res.json({
         message: "New Task Created!"
       });
     });
   })
   .get(function(req, res) {
-    Task.find( {projectID: req.decoded.projectID}, function(err, task) {
+    Task.find( {creatorID: req.decoded.id}, function(err, task) {
       if (err) {
         res.send(err);
         return;
@@ -221,9 +239,31 @@ module.exports = function(app, express, io) {
       res.json(task);
     });
   });
-  // api for angular
+
+  // deleteAllTask api
+  api.post('/deleteAllTasks', function(req, res) {
+    Task.remove({ taskProjectID: req.body.projectID }, function(err) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+    });
+  })
+
+  // deleteOneTask api
+  api.post('/deleteOneTask', function(req, res) {
+    Task.remove({ _id: req.body.id }, function(err) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+    });
+  })
+
+  // api for getUser
   api.get('/me', function(req, res) {
     res.json(req.decoded);
   });
+
   return api;
 }
