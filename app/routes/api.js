@@ -46,6 +46,17 @@ module.exports = function(app, express, io) {
     })
   })
 
+  // All Followup api
+  api.get('/all_followups', function(req, res) {
+    Followup.find({}, function(err, followups) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(followups);
+    })
+  })
+
   // login api
   api.post('/login', function(req, res) {
     User.findOne({
@@ -268,8 +279,8 @@ module.exports = function(app, express, io) {
       creatorID: req.decoded.id,
       creator: req.decoded.firstname + " " + req.decoded.lastname,
       followupTaskID: req.body.followupTaskID,
-      title: req.body.taskTitle,
-      description: req.body.taskDescription,
+      title: req.body.followupTitle,
+      description: req.body.followupDescription,
       last_modified_date: req.body.taskLast_modified_date
     });
     followup.save(function(err, newFollowup) {
