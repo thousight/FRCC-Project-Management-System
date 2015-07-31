@@ -1,9 +1,9 @@
-angular.module('projectCtrl', ['projectService'])
+angular.module('projectCtrl', ['projectService', '$filter'])
 
 .controller('ProjectController', function(Project, Task, socketio) {
   var vm = this;
 
-  // Projects
+  // Get projects
   Project.getProjects()
   .success(function(data) {
     vm.projects = data;
@@ -35,6 +35,44 @@ angular.module('projectCtrl', ['projectService'])
       location.reload();
     } else {
       return;
+    }
+  }
+
+  vm.updateProject = function(id) {
+    vm.message = '';
+    vm.projectData._id = id;
+    Project.create(vm.projectData)
+    .success(function(data) {
+      // Clear up the project
+      vm.projectData = '';
+      vm.message = data.message;
+      var modalName = '#updateProject' + id;
+      $(modalName).modal('hide');
+    })
+  }
+
+  vm.percentage = function(id) {
+    return 60;
+  }
+
+  vm.completeProject = function(id) {
+    if(percentage(id) = 100) {
+      
+      vm.projectData._id = id;
+
+      var now = new Date();
+      var today_obj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      today_obj = $filter('date')(today_obj, "MMM dd, yyyy");
+      vm.projectData.complete_date  = String(today_obj);
+
+      Project.completeProject(vm.projectData)
+      .success(function(data) {
+        // Clear up the project
+        vm.projectData = '';
+        vm.message = data.message;
+      })
+    } else {
+      return "There are still tasks to be finished, complete them first.";
     }
   }
 

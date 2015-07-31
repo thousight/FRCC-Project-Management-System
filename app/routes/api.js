@@ -24,39 +24,6 @@ function createToken(user) {
 module.exports = function(app, express, io) {
   var api = express.Router();
 
-  // All Projects api
-  api.get('/all_projects', function(req, res) {
-    Project.find({}, function(err, projects) {
-      if (err) {
-        res.send(err);
-        return;
-      }
-      res.json(projects);
-    })
-  })
-
-  // All Tasks api
-  api.get('/all_tasks', function(req, res) {
-    Task.find({}, function(err, tasks) {
-      if (err) {
-        res.send(err);
-        return;
-      }
-      res.json(tasks);
-    })
-  })
-
-  // All Followup api
-  api.get('/all_followups', function(req, res) {
-    Followup.find({}, function(err, followups) {
-      if (err) {
-        res.send(err);
-        return;
-      }
-      res.json(followups);
-    })
-  })
-
   // login api
   api.post('/login', function(req, res) {
     User.findOne({
@@ -99,6 +66,20 @@ module.exports = function(app, express, io) {
       res.status(403).send({ success: false, message: "No Token Provided." });
     }
   });
+
+
+  // Project
+
+  // All Projects api
+  api.get('/all_projects', function(req, res) {
+    Project.find({}, function(err, projects) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(projects);
+    })
+  })
 
   // api for projects creation and retrieval
   api.route('/projects')
@@ -179,6 +160,85 @@ module.exports = function(app, express, io) {
         return;
       }
     });
+  })
+
+  // updateProject api
+  api.post('/updateProject', function(req, res) {
+    var calcStatus = function()　{
+      var now = new Date();
+      var today_obj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      var start_obj = new Date(req.body.start_date);
+      var due_obj = new Date(req.body.due_date);
+      var today = today_obj.getTime();
+      var start = start_obj.getTime();
+      var due = due_obj.getTime();
+      // Now is before project start date
+      if (today < start) {
+        return "Not started";
+      }
+      // Today is project start date and it's not an one-day event
+      else if (today == start && start != due) {
+        return "Starts today";
+      }
+      // Today is project due date or it's an one-day event
+      else if (today == due || start == due) {
+        return "Due today";
+      }
+      // Now is in project date range
+      else if (today > start && today < due && start != due) {
+        return "In progress";
+      }
+      // Anything else
+      else {
+        return "Passed due";
+      }
+    }
+    var update = {
+      title: req.body.title,
+      short_description: req.body.short_description,
+      description: req.body.description,
+      priority: req.body.priority,
+      status: calcStatus(),
+      assign_dept: req.body.assign_dept,
+      actual_cost: req.body.actual_cost,
+      last_modified_date: Date.now(),
+      due_date: req.body.due_date,
+      start_date: req.body.start_date
+    };
+    Project.findByIdAndUpdate(req.body._id, { $set: update }, function (err, project) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.send(project);
+    })
+  })
+
+  // completeProject api
+  api.post('/completeProject', function(req, res) {
+    var update = {
+      complete_date: req.body.complete_date
+    };
+    Project.findByIdAndUpdate(req.body._id, { $set: update }, function (err, project) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.send(project);
+    })
+  })
+
+  // Task
+
+  // All Tasks api
+  api.get('/all_tasks', function(req, res) {
+    Task.find({}, function(err, tasks) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(tasks);
+    })
   })
 
   // api for tasks creation and retrieval
@@ -272,6 +332,20 @@ module.exports = function(app, express, io) {
     });
   })
 
+
+  // Followup
+
+  // All Followup api
+  api.get('/all_followups', function(req, res) {
+    Followup.find({}, function(err, followups) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(followups);
+    })
+  })
+
   // api for followups creation and retrieval
   api.route('/followups')
   .post(function(req, res) {
@@ -323,6 +397,9 @@ module.exports = function(app, express, io) {
       }
     });
   })
+
+
+  // User
 
   // api for getUser
   api.get('/me', function(req, res) {

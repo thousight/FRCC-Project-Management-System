@@ -13,7 +13,7 @@ var ProjectSchema = new Schema ({
   assign_dept: String,
   estimate_cost: Number,
   actual_cost: Number,
-  last_modified_date: Date,
+  last_modified_date: {type: Date, default: Date.now},
   due_date: Date,
   start_date: Date,
   complete_date: {type: String, default: "Incomplete"},

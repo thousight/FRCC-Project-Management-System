@@ -14,6 +14,12 @@ angular.module('projectService', [])
   projectFactory.deleteProject = function(id) {
     return $http.post('/api/deleteProject', {id: id});
   }
+  projectFactory.updateProject = function(projectData) {
+    return $http.post('/api/updateProject', projectData);
+  }
+  projectFactory.completeProject = function(projectData) {
+    return $http.post('/api/completeProject', projectData);
+  }
   return projectFactory;
 })
 
