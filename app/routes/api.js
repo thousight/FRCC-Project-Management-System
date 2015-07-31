@@ -332,6 +332,27 @@ module.exports = function(app, express, io) {
     });
   })
 
+  // countTotalTask api
+  api.get('/countTotalTask', function(req, res) {
+    Task.count({taskProjectID: req.body.id}, function(err, count) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(count);
+    })
+  })
+
+  // countCompletedTask api
+  api.get('/countCompletedTask', function(req, res) {
+    Task.count({taskProjectID: req.body.id, complete_date: {$ne : "Incomplete"}}, function(err, count) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(count);
+    })
+  })
 
   // Followup
 

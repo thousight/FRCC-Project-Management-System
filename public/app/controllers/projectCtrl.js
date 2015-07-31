@@ -1,6 +1,6 @@
-angular.module('projectCtrl', ['projectService', '$filter'])
+angular.module('projectCtrl', ['projectService'])
 
-.controller('ProjectController', function(Project, Task, socketio) {
+.controller('ProjectController', function(Project, Task, socketio, $filter) {
   var vm = this;
 
   // Get projects
@@ -52,12 +52,14 @@ angular.module('projectCtrl', ['projectService', '$filter'])
   }
 
   vm.percentage = function(id) {
-    return 60;
+    var totalTasks =  Task.countTotalTask(id);
+    var completedTasks = Task.countCompletedTask(id);
+    return 100 * (completedTasks / totalTasks);
   }
 
   vm.completeProject = function(id) {
-    if(percentage(id) = 100) {
-      
+    if (vm.percentage(id) = 100) {
+
       vm.projectData._id = id;
 
       var now = new Date();
@@ -72,7 +74,8 @@ angular.module('projectCtrl', ['projectService', '$filter'])
         vm.message = data.message;
       })
     } else {
-      return "There are still tasks to be finished, complete them first.";
+      alert("There are still tasks to be finished, complete them first.");
+      return;
     }
   }
 

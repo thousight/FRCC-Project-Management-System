@@ -40,6 +40,12 @@ angular.module('projectService', [])
   taskFactory.deleteOneTask = function(id) {
     return $http.post('/api/deleteOneTask', {id: id});
   }
+  taskFactory.countTotalTask = function(id) {
+    return $http.get('/api/countTotalTask', {id: id});
+  }
+  taskFactory.countCompletedTask = function(id) {
+    return $http.get('/api/countCompletedTask', {id: id});
+  }
   return taskFactory;
 })
 
