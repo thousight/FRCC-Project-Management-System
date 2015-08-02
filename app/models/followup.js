@@ -8,7 +8,8 @@ var FollowupSchema = new Schema ({
   title: String,
   description: String,
   last_modified_date: Date,
-  dateCreated: {type: Date, default: Date.now}
+  dateCreated: {type: Date, default: Date.now},
+  complete_date: {type: String, default: "Incomplete"}
 });
 
 module.exports = mongoose.model('Followup', FollowupSchema);

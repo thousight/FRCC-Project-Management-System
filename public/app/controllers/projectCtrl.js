@@ -7,6 +7,9 @@ angular.module('projectCtrl', ['projectService'])
   Project.getProjects()
   .success(function(data) {
     vm.projects = data;
+    for(var i = 0; i < vm.projects.length; i++){
+      vm.projects[i].percentage = vm.percentage(vm.projects[i]._id);
+    }
   })
 
   vm.createProject = function() {
@@ -52,19 +55,21 @@ angular.module('projectCtrl', ['projectService'])
   }
 
   vm.percentage = function(id) {
-    var totalTasks =  Task.countTotalTask(id);
+    var totalTasks = Task.countTotalTask(id);
     var completedTasks = Task.countCompletedTask(id);
+    console.log(Task.countTotalTask(id) + " total");
+    console.log(Task.countCompletedTask(id) + " completed");
     return 100 * (completedTasks / totalTasks);
   }
 
   vm.completeProject = function(id) {
-    if (vm.percentage(id) = 100) {
+    if (vm.percentage(id) == 100.0) {
 
       vm.projectData._id = id;
 
       var now = new Date();
       var today_obj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      today_obj = $filter('date')(today_obj, "MMM dd, yyyy");
+      today_obj = $filter('date')(today_obj, "MMM d, yyyy");
       vm.projectData.complete_date  = String(today_obj);
 
       Project.completeProject(vm.projectData)

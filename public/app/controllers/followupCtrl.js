@@ -1,6 +1,6 @@
 angular.module('followupCtrl', ['projectService'])
 
-.controller('FollowupController', function(Followup, socketio) {
+.controller('FollowupController', function(Followup, socketio, $filter) {
   var vm = this;
   Followup.getFollowups()
   .success(function(data) {
@@ -28,6 +28,20 @@ angular.module('followupCtrl', ['projectService'])
     } else {
       return;
     }
+  }
+
+  vm.completeFollowup = function(id) {
+    var now = new Date();
+    var today_obj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    today_obj = $filter('date')(today_obj, "MMM d, yyyy");
+    var complete_date  = String(today_obj);
+
+    Followup.completeFollowup(id, complete_date)
+    .success(function(data) {
+      // Clear up the project
+      vm.taskData = '';
+      vm.message = data.message;
+    })
   }
 
   socketio.on('followup', function(data) {

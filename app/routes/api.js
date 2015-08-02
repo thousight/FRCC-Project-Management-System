@@ -216,10 +216,7 @@ module.exports = function(app, express, io) {
 
   // completeProject api
   api.post('/completeProject', function(req, res) {
-    var update = {
-      complete_date: req.body.complete_date
-    };
-    Project.findByIdAndUpdate(req.body._id, { $set: update }, function (err, project) {
+    Project.findByIdAndUpdate(req.body._id, { $set: {complete_date: req.body.complete_date} }, function (err, project) {
       if (err) {
         res.send(err);
         return;
@@ -332,25 +329,36 @@ module.exports = function(app, express, io) {
     });
   })
 
+  // completeTask api
+  api.post('/completeTask', function(req, res) {
+    Task.findByIdAndUpdate(req.body.id, { $set: {complete_date: req.body.complete_date} }, function (err, task) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.send(task);
+    })
+  })
+
   // countTotalTask api
-  api.get('/countTotalTask', function(req, res) {
+  api.post('/countTotalTask', function(req, res) {
     Task.count({taskProjectID: req.body.id}, function(err, count) {
       if (err) {
         res.send(err);
         return;
       }
-      res.json(count);
+      res.send(count);
     })
   })
 
   // countCompletedTask api
-  api.get('/countCompletedTask', function(req, res) {
-    Task.count({taskProjectID: req.body.id, complete_date: {$ne : "Incomplete"}}, function(err, count) {
+  api.post('/countCompletedTask', function(req, res) {
+    Task.count({$and: [{taskProjectID: req.body.id}, {complete_date: {$ne: "Incomplete"}}]}, function(err, count) {
       if (err) {
         res.send(err);
         return;
       }
-      res.json(count);
+      res.send(count);
     })
   })
 
@@ -401,7 +409,7 @@ module.exports = function(app, express, io) {
 
   // deleteAllFollowups api
   api.post('/deleteAllFollowups', function(req, res) {
-    Task.remove({ followupTaskID: req.body.taskID }, function(err) {
+    Followup.remove({ followupTaskID: req.body.taskID }, function(err) {
       if (err) {
         res.send(err);
         return;
@@ -411,12 +419,23 @@ module.exports = function(app, express, io) {
 
   // deleteOneFollowup api
   api.post('/deleteOneFollowup', function(req, res) {
-    Task.remove({ _id: req.body.id }, function(err) {
+    Followup.remove({ _id: req.body.id }, function(err) {
       if (err) {
         res.send(err);
         return;
       }
     });
+  })
+
+  // completeFollowup api
+  api.post('/completeFollowup', function(req, res) {
+    Followup.findByIdAndUpdate(req.body.id, { $set: {complete_date: req.body.complete_date} }, function (err, followup) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.send(followup);
+    })
   })
 
 

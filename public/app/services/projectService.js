@@ -40,11 +40,17 @@ angular.module('projectService', [])
   taskFactory.deleteOneTask = function(id) {
     return $http.post('/api/deleteOneTask', {id: id});
   }
+  taskFactory.completeTask = function(id, complete_date) {
+    return $http.post('/api/completeTask', {
+      id: id,
+      complete_date: complete_date
+    });
+  }
   taskFactory.countTotalTask = function(id) {
-    return $http.get('/api/countTotalTask', {id: id});
+    return $http.post('/api/countTotalTask', {id: id});
   }
   taskFactory.countCompletedTask = function(id) {
-    return $http.get('/api/countCompletedTask', {id: id});
+    return $http.post('/api/countCompletedTask', {id: id});
   }
   return taskFactory;
 })
@@ -65,6 +71,12 @@ angular.module('projectService', [])
   }
   followupFactory.deleteOneFollowup = function(id) {
     return $http.post('/api/deleteOneFollowup', {id: id});
+  }
+  followupFactory.completeFollowup = function(id, complete_date) {
+    return $http.post('/api/completeFollowup', {
+      id: id,
+      complete_date: complete_date
+    });
   }
   return followupFactory;
 })
