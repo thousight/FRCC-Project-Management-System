@@ -442,6 +442,16 @@ module.exports = function(app, express, io) {
   // User
 
   // api for getUser
+  api.get('/all_users', function(req, res) {
+    User.find({}, function(err, users) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(users);
+    })
+  })
+
   api.get('/me', function(req, res) {
     res.json(req.decoded);
   });

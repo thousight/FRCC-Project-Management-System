@@ -4,9 +4,9 @@ angular.module('userService', [])
   var userFactory = {};
 
   // List all users
-  userFactory.all = function() {
-    return $http.get('api/users');
+  userFactory.allUsers = function() {
+    return $http.get('api/all_users');
   }
-  
+
   return userFactory;
 })

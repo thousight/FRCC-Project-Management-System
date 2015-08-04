@@ -1,1 +1,21 @@
-<h1>Under Construction</h1>
+<div class="row" ng-if="main.loggedIn">
+  <div class="col-md-2">
+
+  </div>
+
+  <div class="col-md-8">
+    <form class="form-group">
+      <input type="text" class="form-control" placeholder="Search for..." ng-model="query">
+    </form>
+    <br>
+    <div class="panel-group" ng-repeat="eachUser in user.users | filter: query | orderBy: 'lastname' track by $index">
+      <div class="panel panel-info">
+        <div class="panel-heading"><span class="glyphicon glyphicon-user"></span> {{eachUser.firstname}} {{eachUser.lastname}} {{eachUser.cname}} <span class="badge pull-right"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-2">
+
+  </div>
+</div>

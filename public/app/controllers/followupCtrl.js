@@ -50,9 +50,12 @@ angular.module('followupCtrl', ['projectService'])
 
 })
 
-.controller('AllFollowupsController', function(followups, socketio) {
+.controller('AllFollowupsController', function(Followup, socketio) {
   var vm = this;
-  vm.followups = followups.data;
+  Followup.getFollowups()
+  .success(function(data) {
+    vm.followups = data;
+  })
 
   socketio.on('followup', function(data) {
     vm.followups.push(data);

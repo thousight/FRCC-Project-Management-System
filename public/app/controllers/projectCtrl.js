@@ -90,7 +90,7 @@ angular.module('projectCtrl', ['projectService'])
 
 })
 
-.controller('AllProjectsController', function(projects, socketio) {
+.controller('AllProjectsController', function(projects, socketio, $controller) {
   var vm = this;
   vm.projects = projects.data;
 

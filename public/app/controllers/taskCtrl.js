@@ -57,9 +57,12 @@ angular.module('taskCtrl', ['projectService'])
 
 })
 
-.controller('AllTasksController', function(tasks, socketio) {
+.controller('AllTasksController', function(Task, socketio, $controller) {
   var vm = this;
-  vm.tasks = tasks.data;
+  Task.allTasks()
+  .success(function(data) {
+    vm.tasks = data;
+  })
 
   socketio.on('task', function(data) {
     vm.tasks.push(data);
