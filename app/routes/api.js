@@ -126,10 +126,11 @@ module.exports = function(app, express, io) {
       assign_dept: req.body.assign_dept,
       estimate_cost: req.body.estimate_cost,
       actual_cost: req.body.actual_cost,
-      last_modified_date: req.body.last_modified_date,
+      last_modified_date: Date.now(),
       due_date: req.body.due_date,
       start_date: req.body.start_date,
-      complete_date: req.body.complete_date,
+      complete_date: "Incomplete",
+      dateCreated: Date.now()
     });
     project.save(function(err, newProject) {
       if (err) {
@@ -449,6 +450,69 @@ module.exports = function(app, express, io) {
         return;
       }
       res.json(users);
+    })
+  })
+
+  // api for signup
+  // Not gonna create a service for it, but have it for easier signup because password is encrypted in database
+  // To create a user, just POST the fields and correlated records to Postman(a chrome app, may use something similar) to IP/api/signup
+  api.post('/signup', function(req, res) {
+    var user = new User({
+      frcc_member_id: req.body.frcc_member_id,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      username: req.body.username,
+      password: req.body.password,
+      department: req.body.department,
+      cname: req.body.cname,
+      contact_phone: req.body.contact_phone,
+      cell_phone: req.body.cell_phone,
+      email: req.body.email,
+      street: req.body.street,
+      city: req.body.city,
+      state: req.body.state,
+      zip: req.body.zip,
+      country: req.body.country,
+      isMale: req.body.isMale,
+      status: req.body.status,
+      selected: req.body.selected,
+      frcc_member: req.body.frcc_member,
+      frcc_family_id: req.body.frcc_family_id,
+      family_relation: req.body.family_relation,
+      marital_status: req.body.marital_status,
+      main_language: req.body.main_language,
+      christian: req.body.christian,
+      primary_group: req.body.primary_group,
+      frcc_familyserve: req.body.frcc_familyserve,
+      zone_leader_id: req.body.zone_leader_id,
+      groups: req.body.groups,
+      dob: req.body.dob,
+      first_sunday: req.body.first_sunday,
+      salvation: req.body.salvation,
+      baptize: req.body.baptize,
+      discount_code: req.body.discount_code,
+      frtc_teacher: req.body.frtc_teacher,
+      frtc_registered: req.body.frtc_registered,
+      frtc_eschool: req.body.frtc_eschool,
+      frtc_equipping: req.body.frtc_equipping,
+      pm_role: req.body.pm_role,
+      created_date: req.body.created_date,
+      update_date: req.body.update_date,
+      update_person: req.body.update_person,
+      division: req.body.division,
+      organization: req.body.organization
+    });
+    var token = createToken(user);
+    user.save(function(err) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json({
+        success: true,
+        message: 'User has been created!',
+        token: token
+      });
     })
   })
 

@@ -13,11 +13,11 @@ var ProjectSchema = new Schema ({
   assign_dept: String,
   estimate_cost: Number,
   actual_cost: Number,
-  last_modified_date: {type: Date, default: Date.now},
+  last_modified_date: Date,
   due_date: Date,
   start_date: Date,
-  complete_date: {type: String, default: "Incomplete"},
-  dateCreated: {type: Date, default: Date.now}
+  complete_date: String,
+  dateCreated: Date
 });
 
 module.exports = mongoose.model('Project', ProjectSchema);
