@@ -226,6 +226,51 @@ module.exports = function(app, express, io) {
     })
   })
 
+  // status api for real time update
+  api.get('/projectStatus', function(req, res) {
+    var calcStatus = function(eachProject)　{
+      var now = new Date();
+      var today_obj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      var start_obj = new Date(eachProject.start_date);
+      var due_obj = new Date(eachProject.due_date);
+      var today = today_obj.getTime();
+      var start = start_obj.getTime();
+      var due = due_obj.getTime();
+      // Now is before project start date
+      if (today < start) {
+        return "Not started";
+      }
+      // Today is project start date and it's not an one-day event
+      else if (today == start && start != due) {
+        return "Starts today";
+      }
+      // Today is project due date or it's an one-day event
+      else if (today == due || start == due) {
+        return "Due today";
+      }
+      // Now is in project date range
+      else if (today > start && today < due && start != due) {
+        return "In progress";
+      }
+      // Anything else
+      else {
+        return "Passed due";
+      }
+    }
+    Project.find( {creatorID: req.decoded.id}, function(err, project) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      for (var i = 0; i < project.length; i++) {
+        var eachProject = project[i];
+        var statusName = "status" + eachProject._id;
+        io.emit(statusName, {'status': calcStatus(eachProject)});
+      }
+    });
+  })
+
+
   // Task
 
   // All Tasks api
@@ -284,17 +329,18 @@ module.exports = function(app, express, io) {
       assignee_dept: req.body.assignee_dept,
       estimate_cost: req.body.taskEstimate_cost,
       actual_cost: req.body.TaskActual_cost,
-      last_modified_date: req.body.taskLast_modified_date,
+      last_modified_date: Date.now(),
       due_date: req.body.taskDue_date,
       start_date: req.body.taskStart_date,
-      complete_date: req.body.taskComplete_date,
+      dateCreated: Date.now(),
+      complete_date: "Incomplete",
     });
     task.save(function(err, newTask) {
       if (err) {
         res.send(err);
         return;
       }
-      io.emit('tasks', newTask);
+      io.emit('task', newTask);
       res.json({
         message: "New Task Created!"
       });
@@ -337,7 +383,6 @@ module.exports = function(app, express, io) {
         res.send(err);
         return;
       }
-      res.send(task);
     })
   })
 
@@ -385,14 +430,16 @@ module.exports = function(app, express, io) {
       followupTaskID: req.body.followupTaskID,
       title: req.body.followupTitle,
       description: req.body.followupDescription,
-      last_modified_date: req.body.taskLast_modified_date
+      last_modified_date: Date.now(),
+      dateCreated: Date.now(),
+      complete_date: "Incomplete"
     });
     followup.save(function(err, newFollowup) {
       if (err) {
         res.send(err);
         return;
       }
-      io.emit('followups', newFollowup);
+      io.emit('followup', newFollowup);
       res.json({
         message: "New Followup Created!"
       });

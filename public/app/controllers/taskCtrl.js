@@ -44,11 +44,7 @@ angular.module('taskCtrl', ['projectService'])
     var complete_date  = String(today_obj);
 
     Task.completeTask(id, complete_date)
-    .success(function(data) {
-      // Clear up the project
-      vm.taskData = '';
-      vm.message = data.message;
-    })
+    location.reload();
   }
 
   socketio.on('task', function(data) {

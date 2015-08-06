@@ -4,9 +4,9 @@
   </div>
 
   <div class="col-md-8">
-    <input type="text" class="form-control" placeholder="Search any record" ng-model="query">
+    <input type="text" class="form-control" placeholder="Search with any field data" ng-model="search">
     <br>
-    <div class="panel-group" ng-repeat="eachUser in user.users | filter: query | orderBy: 'lastname' track by $index">
+    <div class="panel-group" ng-repeat="eachUser in user.users | filter: search | orderBy: 'lastname' track by $index">
       <div class="panel panel-info">
         <div class="panel-heading"><span class="glyphicon glyphicon-user"></span> {{eachUser.firstname}} {{eachUser.lastname}} {{eachUser.cname}} <span class="badge pull-right"></span></div>
       </div>

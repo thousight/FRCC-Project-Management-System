@@ -20,6 +20,9 @@ angular.module('projectService', [])
   projectFactory.completeProject = function(projectData) {
     return $http.post('/api/completeProject', projectData);
   }
+  projectFactory.projectStatus = function() {
+    return $http.get('/api/projectStatus');
+  }
   return projectFactory;
 })
 

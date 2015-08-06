@@ -3,8 +3,8 @@ angular.module('userCtrl', ['userService'])
 .controller('AllUsersController', function(User, $scope) {
   var vm = this;
   User.allUsers()
-    .success(function(data) {
-      vm.users = data;
-    })
-  $scope.query = [];
+  .success(function(data) {
+    vm.users = data;
+  })
+  $scope.search = [];
 })

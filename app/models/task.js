@@ -16,8 +16,8 @@ var TaskSchema = new Schema ({
   last_modified_date: Date,
   due_date: Date,
   start_date: Date,
-  complete_date: {type: String, default: "Incomplete"},
-  dateCreated: {type: Date, default: Date.now}
+  complete_date: String,
+  dateCreated: Date
 });
 
 module.exports = mongoose.model('Task', TaskSchema);
