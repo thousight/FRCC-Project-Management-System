@@ -1,6 +1,6 @@
 angular.module('projectCtrl', ['projectService'])
 
-.controller('ProjectController', function(Project, Task, socketio, $filter) {
+.controller('ProjectController', function(Project, Task, socketio, $filter, $scope) {
   var vm = this;
 
   // Get projects
@@ -41,16 +41,41 @@ angular.module('projectCtrl', ['projectService'])
     }
   }
 
+
+  // Finding the specific project from vm.projects
+  var findProject = function(id) {
+    for (var i = 0; i < vm.projects.length; i++) {
+      if (vm.projects[i]._id == id) {
+        return vm.projects[i];
+      }
+    }
+  }
+
+  vm.preUpdateProject = function(id) {
+    var theProject = findProject(id);
+
+    vm.updateProjectData = {
+      title: theProject.title,
+      short_description: theProject.short_description,
+      description: theProject.description,
+      priority: theProject.priority,
+      assign_dept: theProject.assign_dept,
+      start_date: new Date(theProject.start_date),
+      due_date: new Date(theProject.due_date)
+    };
+  }
+
   vm.updateProject = function(id) {
     vm.message = '';
-    vm.projectData._id = id;
-    Project.create(vm.projectData)
+    vm.updateProjectData._id = id;
+    Project.updateProject(vm.updateProjectData)
     .success(function(data) {
       // Clear up the project
-      vm.projectData = '';
+      vm.updateProjectData = '';
       vm.message = data.message;
       var modalName = '#updateProject' + id;
       $(modalName).modal('hide');
+      location.reload();
     })
   }
 

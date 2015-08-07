@@ -52,20 +52,65 @@
                   Description: <br>
                   <input class="form-control input-lg" type="text" name=description ng-model="project.projectData.description" required="true">
                   Priority: <br>
-                  <Input type="radio" name=priority ng-model="project.projectData.priority" value="Important" required="true">Important<br>
-                    <Input type="radio" name=priority ng-model="project.projectData.priority" value="Emergent" required="true">Emergent<br>
+                  <input type="radio" name=priority ng-model="project.projectData.priority" value="Important" required="true">Important<br>
+                  <input type="radio" name=priority ng-model="project.projectData.priority" value="Emergent" required="true">Emergent<br>
+                  Assign Department: <br>
+                  <select class="form-control" type="text" name=assign_dept ng-model="project.projectData.assign_dept" required="true">
+                    <option value="Accounting">Accounting</option>
+                    <option value="IT">IT</option>
+                    <option value="Media">Media</option>
+                  </select>
+                  Estimate Cost: <br>
+                  <input class="form-control" type="number" name=estimate_cost ng-model="project.projectData.estimate_cost" required="true">
+                  Start Date: <br>
+                  <input class="form-control" type="date" name=start_date ng-model="project.projectData.start_date" required="true">
+                  Due Date: <br>
+                  <input class="form-control" type="date" name=due_date  ng-model="project.projectData.due_date" required="true">
+                  <div class="text-center">
+                    <br><button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary btn-lg" type="submit">Submit</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel col-md-8">
+
+          <!-- Project heading setup -->
+          <div class="panel-group" ng-repeat="eachProject in project.projects | orderBy:$index:true track by $index">
+
+            <!-- Modal for Updating Project -->
+            <div id="updateProject{{eachProject._id}}" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Update {{eachProject.title}}</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form ng-submit="project.updateProject(eachProject._id)">
+                      Title: <br>
+                      <input class="form-control" type="text" name=title ng-model="project.updateProjectData.title" required="true">
+                      Short Description: <br>
+                      <input class="form-control" type="text" name=short_description ng-model="project.updateProjectData.short_description" required="true" value="{{eachProject.short_description}}">
+                      Description: <br>
+                      <input class="form-control input-lg" type="text" name=description ng-model="project.updateProjectData.description" required="true" value="{{eachProject.description}}">
+                      Priority: <br>
+                      <input type="radio" name=priority ng-model="project.updateProjectData.priority" value="Important">Important<br>
+                      <input type="radio" name=priority ng-model="project.updateProjectData.priority" value="Emergent">Emergent<br>
                       Assign Department: <br>
-                      <select class="form-control" type="text" name=assign_dept ng-model="project.projectData.assign_dept" required="true">
+                      <select class="form-control" type="text" name=assign_dept ng-model="project.updateProjectData.assign_dept" required="true">
                         <option value="Accounting">Accounting</option>
                         <option value="IT">IT</option>
                         <option value="Media">Media</option>
                       </select>
-                      Estimate Cost: <br>
-                      <input class="form-control" type="number" name=estimate_cost ng-model="project.projectData.estimate_cost" required="true">
                       Start Date: <br>
-                      <input class="form-control" type="date" name=start_date ng-model="project.projectData.start_date" required="true">
+                      <input class="form-control" type="date" name=start_date ng-model="project.updateProjectData.start_date" required="true" value="{{eachProject.start_date}}">
                       Due Date: <br>
-                      <input class="form-control" type="date" name=due_date  ng-model="project.projectData.due_date" required="true">
+                      <input class="form-control" type="date" name=due_date  ng-model="project.updateProjectData.due_date" required="true" value="{{eachProject.due_date}}">
                       <div class="text-center">
                         <br><button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
                         <button class="btn btn-primary btn-lg" type="submit">Submit</button>
@@ -76,178 +121,253 @@
               </div>
             </div>
 
-            <div class="panel col-md-8">
+            <div class="panel panel-info">
+              <div class="panel-heading" data-toggle="collapse" ng-click="true" data-target="#projectDetails{{eachProject._id}}" href="#projectDetails{{eachProject._id}}">
+                <h4><span class="glyphicon glyphicon-briefcase"></span> {{eachProject.title}}: {{eachProject.short_description}} <span class="glyphicon glyphicon-check pull-right" ng-if="eachProject.complete_date != 'Incomplete'"></span></h4>
+              </div>
+              <div class="panel-collapse collapse out" id="projectDetails{{eachProject._id}}">
+                <p class="panel-body">
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{eachProject.percentage}}%;">
+                      {{eachProject.percentage}}%
+                    </div>
+                  </div>
 
-              <!-- Project heading setup -->
-              <div class="panel-group" ng-repeat="eachProject in project.projects | orderBy:$index:true track by $index">
-
-                <!-- Modal for Updating Project -->
-                <div id="updateProject{{eachProject._id}}" class="modal fade" role="dialog">
-                  <div class="modal-dialog">
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Update {{eachProject.title}}</h4>
+                  <!-- Project function button group when incomplete-->
+                  <div class="text-center" ng-if="eachProject.complete_date == 'Incomplete'">
+                    <div class="btn-group btn-group-justified" role="group" aria-label="projectFunctions">
+                      <!-- button for adding task -->
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createTask{{eachProject._id}}" href="#createTask{{eachProject._id}}">Add Task</button>
                       </div>
-                      <div class="modal-body">
-                        <form ng-submit="project.updateProject(eachProject._id)">
-                          Title: <br>
-                          <input class="form-control" type="text" name=title ng-model="project.projectData.title" required="true" value="{{eachProject.title}}">
-                          Short Description: <br>
-                          <input class="form-control" type="text" name=short_description ng-model="project.projectData.short_description" required="true" value="{{eachProject.short_description}}">
-                          Description: <br>
-                          <input class="form-control input-lg" type="text" name=description ng-model="project.projectData.description" required="true" value="{{eachProject.description}}">
-                          Priority: <br>
-                          <Input type="radio" name=priority ng-model="project.projectData.priority" value="Important">Important<br>
-                            <Input type="radio" name=priority ng-model="project.projectData.priority" value="Emergent">Emergent<br>
-                              Assign Department: <br>
-                              <select class="form-control" type="text" name=assign_dept ng-model="project.projectData.assign_dept" required="true">
-                                <option value="Accounting">Accounting</option>
-                                <option value="IT">IT</option>
-                                <option value="Media">Media</option>
-                              </select>
-                              Start Date: <br>
-                              <input class="form-control" type="date" name=start_date ng-model="project.projectData.start_date" required="true" value="{{eachProject.start_date}}">
-                              Due Date: <br>
-                              <input class="form-control" type="date" name=due_date  ng-model="project.projectData.due_date" required="true" value="{{eachProject.due_date}}">
-                              <div class="text-center">
-                                <br><button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
-                                <button class="btn btn-primary btn-lg" type="submit">Submit</button>
-                              </div>
-                            </form>
-                          </div>
+                      <div class="btn-group" role="group">
+                        <div class="dropdown">
+                          <button type="button" class="btn btn-info dropdown-toggle" id="updateDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Update<span class="glyphicon glyphicon-triangle-bottom pull-right"></span>
+                          </button>
+                          <ul class="dropdown-menu" aria-labelledby="updateDropdown">
+                            <li><a href="#">Status</a></li>
+                            <li><a href="#" data-toggle="modal" ng-click="project.preUpdateProject(eachProject._id);" data-target="#updateProject{{eachProject._id}}" href="#updateProject{{eachProject._id}}">Other details</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-info" ng-click="project.deleteProject(eachProject._id);">Delete</button>
+                      </div>
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-info" ng-click="project.completeProject(eachProject._id);">Complete</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Project function button group when complete -->
+                  <div class="text-center" ng-if="eachProject.complete_date != 'Incomplete'">
+                    <div class="btn-group btn-group-justified" role="group" aria-label="projectFunctions">
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-info" ng-click="project.deleteProject(eachProject._id);">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <br>
+
+                  <!-- Project detail table -->
+                  <table class="table table-responsive table-bordered table-hover">
+                    <tr>
+                      <th>Created by: </th>
+                      <td>{{eachProject.creator}}</td>
+                    </tr>
+                    <tr>
+                      <th>Creator Department: </th>
+                      <td>{{eachProject.creator_dept}}</td>
+                    </tr>
+                    <tr>
+                      <th>Description: </th>
+                      <td>{{eachProject.description}}</td>
+                    </tr>
+                    <tr>
+                      <th>Priority: </th>
+                      <td>{{eachProject.priority}}</td>
+                    </tr>
+                    <tr>
+                      <th>Assign Department: </th>
+                      <td>{{eachProject.assign_dept}}</td>
+                    </tr>
+                    <tr>
+                      <th>Estimate Cost: </th>
+                      <td>{{eachProject.estimate_cost}}</td>
+                    </tr>
+                    <tr>
+                      <th>Actual Cost: </th>
+                      <td>{{eachProject.actual_cost}}</td>
+                    </tr>
+                    <tr>
+                      <th>Last Modified Date: </th>
+                      <td>{{eachProject.last_modified_date | date : format}}</td>
+                    </tr>
+                    <tr>
+                      <th>Date Created: </th>
+                      <td>{{eachProject.dateCreated | date : format}}</td>
+                    </tr>
+                    <tr>
+                      <th>Start Date: </th>
+                      <td>{{eachProject.start_date | date : format}}</td>
+                    </tr>
+                    <tr>
+                      <th>Due Date: </th>
+                      <td>{{eachProject.due_date | date : format}}  <span class="label label-info" ng-if="eachProject.complete_date == 'Incomplete'">{{eachProject.status}}</span></td>
+                    </tr>
+                    <tr>
+                      <th>Complete Date: </th>
+                      <td>{{eachProject.complete_date}}</td>
+                    </tr>
+                  </table>
+
+                  <br>
+
+                  <!-- Modal for Creating Task -->
+                  <div id="createTask{{eachProject._id}}" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                      <!-- Modal content-->
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">Create a new task</h4>
+                        </div>
+                        <div class="modal-body">
+                          <form ng-submit="task.createTask(eachProject._id)">
+                            Title: <br>
+                            <input class="form-control" type="text" name=title ng-model="task.taskData.taskTitle" required="true">
+                            Description: <br>
+                            <input class="form-control input-lg" type="text" name=description ng-model="task.taskData.taskDescription" required="true">
+                            Assignee: <br>
+                            <input class="form-control" type="text" name=assign_dept ng-model="task.taskData.assigneeName" required="true">
+                            Estimate Cost: <br>
+                            <input class="form-control" type="number" name=estimate_cost ng-model="task.taskData.taskEstimate_cost" required="true">
+                            Start Date: <br>
+                            <input class="form-control" type="date" name=start_date ng-model="task.taskData.taskStart_date" required="true">
+                            Due Date: <br>
+                            <input class="form-control" type="date" name=due_date  ng-model="task.taskData.taskDue_date" required="true">
+                            <div class="text-center">
+                              <br><button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
+                              <button class="btn btn-info btn-lg" type="submit">Submit</button>
+                            </div>
+                          </form>
                         </div>
                       </div>
                     </div>
+                  </div>
 
-                    <div class="panel panel-info">
-                      <div class="panel-heading" data-toggle="collapse" ng-click="true" data-target="#projectDetails{{eachProject._id}}" href="#projectDetails{{eachProject._id}}">
-                        <h4><span class="glyphicon glyphicon-briefcase"></span> {{eachProject.title}}: {{eachProject.short_description}} <span class="glyphicon glyphicon-check pull-right" ng-if="eachProject.complete_date != 'Incomplete'"></span></h4>
+                  <!-- Task heading setup -->
+                  <div class="panel-group" ng-repeat="eachTask in task.tasks | filter: { taskProjectID: eachProject._id }">
+
+                    <div class="panel panel-success">
+                      <div class="panel-heading" data-toggle="collapse" ng-click="true" data-target="#taskDetails{{eachTask._id}}" href="#taskDetails{{eachTask._id}}">
+                        <h5><span class="glyphicon glyphicon-tasks"></span> {{eachTask.title}} <span class="glyphicon glyphicon-check pull-right" ng-if="eachTask.complete_date != 'Incomplete'"></span></h5>
                       </div>
-                      <div class="panel-collapse collapse out" id="projectDetails{{eachProject._id}}">
+                      <div class="panel-collapse collapse out" id="taskDetails{{eachTask._id}}">
                         <p class="panel-body">
-                          <div class="progress">
-                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{eachProject.percentage}}%;">
-                              {{eachProject.percentage}}%
-                            </div>
-                          </div>
 
-                          <!-- Project function button group when incomplete-->
-                          <div class="text-center" ng-if="eachProject.complete_date == 'Incomplete'">
-                            <div class="btn-group btn-group-justified" role="group" aria-label="projectFunctions">
-                              <!-- button for adding task -->
-                              <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createTask{{eachProject._id}}" href="#createTask{{eachProject._id}}">Add Task</button>
-                              </div>
+                          <!-- Task function button group when incomplete -->
+                          <div class="text-center" ng-if="eachTask.complete_date == 'Incomplete'">
+                            <div class="btn-group btn-group-justified" role="group" aria-label="taskFunctions">
                               <div class="btn-group" role="group">
                                 <div class="dropdown">
-                                  <button type="button" class="btn btn-info dropdown-toggle" id="updateDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    Update<span class="glyphicon glyphicon-triangle-bottom pull-right"></span>
+                                  <button type="button" class="btn btn-success dropdown-toggle" id="updateDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Update <span class="glyphicon glyphicon-triangle-bottom pull-right"></span>
                                   </button>
                                   <ul class="dropdown-menu" aria-labelledby="updateDropdown">
                                     <li><a href="#">Status</a></li>
-                                    <li><a href="#" data-toggle="modal" data-target="#updateProject{{eachProject._id}}" href="#updateProject{{eachProject._id}}">Other details</a></li>
+                                    <li><a href="#">Other details</a></li>
                                   </ul>
                                 </div>
                               </div>
                               <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-info" ng-click="project.deleteProject(eachProject._id);">Delete</button>
+                                <button type="button" class="btn btn-success" ng-click="task.deleteOneTask(eachTask._id);">Delete</button>
                               </div>
                               <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-info" ng-click="project.completeProject(eachProject._id);">Complete</button>
+                                <button type="button" class="btn btn-success" ng-click="task.completeTask(eachTask._id);">Complete</button>
                               </div>
                             </div>
                           </div>
 
-                          <!-- Project function button group when complete -->
-                          <div class="text-center" ng-if="eachProject.complete_date != 'Incomplete'">
-                            <div class="btn-group btn-group-justified" role="group" aria-label="projectFunctions">
+                          <!-- Task function button group when complete -->
+                          <div class="text-center" ng-if="eachTask.complete_date != 'Incomplete'">
+                            <div class="btn-group btn-group-justified" role="group" aria-label="taskFunctions">
                               <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-info" ng-click="project.deleteProject(eachProject._id);">Delete</button>
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createFollowup{{eachTask._id}}" href="#createFollowup{{eachTask._id}}">Add Follow Up</button>
+                              </div>
+                              <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-success" ng-click="task.deleteOneTask(eachTask._id);">Delete</button>
                               </div>
                             </div>
                           </div>
 
                           <br>
 
-                          <!-- Project detail table -->
+                          <!-- Task detail table -->
                           <table class="table table-responsive table-bordered table-hover">
                             <tr>
                               <th>Created by: </th>
-                              <td>{{eachProject.creator}}</td>
-                            </tr>
-                            <tr>
-                              <th>Creator Department: </th>
-                              <td>{{eachProject.creator_dept}}</td>
+                              <td>{{eachTask.creator}}</td>
                             </tr>
                             <tr>
                               <th>Description: </th>
-                              <td>{{eachProject.description}}</td>
+                              <td>{{eachTask.description}}</td>
                             </tr>
                             <tr>
-                              <th>Priority: </th>
-                              <td>{{eachProject.priority}}</td>
+                              <th>Assignee: </th>
+                              <td>{{eachTask.assigneeName}}</td>
                             </tr>
                             <tr>
-                              <th>Assign Department: </th>
-                              <td>{{eachProject.assign_dept}}</td>
+                              <th>Assignee Department: </th>
+                              <td>{{eachTask.assignee_dept}}</td>
                             </tr>
                             <tr>
                               <th>Estimate Cost: </th>
-                              <td>{{eachProject.estimate_cost}}</td>
+                              <td>{{eachTask.estimate_cost}}</td>
                             </tr>
                             <tr>
                               <th>Actual Cost: </th>
-                              <td>{{eachProject.actual_cost}}</td>
+                              <td>{{eachTask.actual_cost}}</td>
                             </tr>
                             <tr>
-                              <th>Last Modified Date: </th>
-                              <td>{{eachProject.last_modified_date | date : format}}</td>
+                              <th>Last Modified: </th>
+                              <td>{{eachTask.last_modified_date | date : format}}</td>
                             </tr>
                             <tr>
                               <th>Date Created: </th>
-                              <td>{{eachProject.dateCreated | date : format}}</td>
+                              <td>{{eachTask.dateCreated | date : format}}</td>
                             </tr>
                             <tr>
                               <th>Start Date: </th>
-                              <td>{{eachProject.start_date | date : format}}</td>
+                              <td>{{eachTask.start_date | date : format}}</td>
                             </tr>
                             <tr>
                               <th>Due Date: </th>
-                              <td>{{eachProject.due_date | date : format}}  <span class="label label-info" ng-if="eachProject.complete_date == 'Incomplete'">{{eachProject.status}}</span></td>
+                              <td>{{eachTask.due_date | date : format}}  <span class="label label-success" ng-if="eachTask.complete_date == 'Incomplete'">{{eachTask.status}}</span></td>
                             </tr>
                             <tr>
                               <th>Complete Date: </th>
-                              <td>{{eachProject.complete_date}}</td>
+                              <td>{{eachTask.complete_date | date : format}}</td>
                             </tr>
                           </table>
 
-                          <br>
-
-                          <!-- Modal for Creating Task -->
-                          <div id="createTask{{eachProject._id}}" class="modal fade" role="dialog">
+                          <!-- Modal for Creating Followup -->
+                          <div id="createFollowup{{eachTask._id}}" class="modal fade" role="dialog">
                             <div class="modal-dialog">
                               <!-- Modal content-->
                               <div class="modal-content">
                                 <div class="modal-header">
                                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                  <h4 class="modal-title">Create a new task</h4>
+                                  <h4 class="modal-title">Create a new follow up</h4>
                                 </div>
                                 <div class="modal-body">
-                                  <form ng-submit="task.createTask(eachProject._id)">
+                                  <form ng-submit="followup.createFollowup(eachTask._id)">
                                     Title: <br>
-                                    <input class="form-control" type="text" name=title ng-model="task.taskData.taskTitle" required="true">
+                                    <input class="form-control" type="text" name=title ng-model="followup.followupData.followupTitle" required="true">
                                     Description: <br>
-                                    <input class="form-control input-lg" type="text" name=description ng-model="task.taskData.taskDescription" required="true">
-                                    Assignee: <br>
-                                    <input class="form-control" type="text" name=assign_dept ng-model="task.taskData.assigneeName" required="true">
-                                    Estimate Cost: <br>
-                                    <input class="form-control" type="number" name=estimate_cost ng-model="task.taskData.taskEstimate_cost" required="true">
-                                    Start Date: <br>
-                                    <input class="form-control" type="date" name=start_date ng-model="task.taskData.taskStart_date" required="true">
-                                    Due Date: <br>
-                                    <input class="form-control" type="date" name=due_date  ng-model="task.taskData.taskDue_date" required="true">
+                                    <input class="form-control input-lg" type="text" name=description ng-model="followup.followupData.followupDescription" required="true">
                                     <div class="text-center">
                                       <br><button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
                                       <button class="btn btn-info btn-lg" type="submit">Submit</button>
@@ -258,22 +378,23 @@
                             </div>
                           </div>
 
-                          <!-- Task heading setup -->
-                          <div class="panel-group" ng-repeat="eachTask in task.tasks | filter: { taskProjectID: eachProject._id }">
+                          <br>
 
-                            <div class="panel panel-success">
-                              <div class="panel-heading" data-toggle="collapse" ng-click="true" data-target="#taskDetails{{eachTask._id}}" href="#taskDetails{{eachTask._id}}">
-                                <h5><span class="glyphicon glyphicon-tasks"></span> {{eachTask.title}} <span class="glyphicon glyphicon-check pull-right" ng-if="eachTask.complete_date != 'Incomplete'"></span></h5>
+                          <!-- Followup heading setup -->
+                          <div class="panel-group" ng-repeat="eachFollowup in followup.followups | filter: { followupTaskID: eachTask._id }">
+                            <div class="panel panel-warning">
+                              <div class="panel-heading" data-toggle="collapse" ng-click="true" data-target="#followupDetails{{eachFollowup._id}}" href="#followupDetails{{eachFollowup._id}}">
+                                <h5><span class="glyphicon glyphicon-paperclip"></span> {{eachFollowup.title}} <span class="glyphicon glyphicon-check pull-right" ng-if="eachFollowup.complete_date != 'Incomplete'"></span></h5>
                               </div>
-                              <div class="panel-collapse collapse out" id="taskDetails{{eachTask._id}}">
+                              <div class="panel-collapse collapse out" id="followupDetails{{eachFollowup._id}}">
                                 <p class="panel-body">
 
-                                  <!-- Task function button group when incomplete -->
-                                  <div class="text-center" ng-if="eachTask.complete_date == 'Incomplete'">
+                                  <!-- Followup function button group when incomplete-->
+                                  <div class="text-center" ng-if="eachFollowup.complete_date == 'Incomplete'">
                                     <div class="btn-group btn-group-justified" role="group" aria-label="taskFunctions">
                                       <div class="btn-group" role="group">
                                         <div class="dropdown">
-                                          <button type="button" class="btn btn-success dropdown-toggle" id="updateDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                          <button type="button" class="btn btn-warning dropdown-toggle" id="updateDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                             Update <span class="glyphicon glyphicon-triangle-bottom pull-right"></span>
                                           </button>
                                           <ul class="dropdown-menu" aria-labelledby="updateDropdown">
@@ -283,173 +404,48 @@
                                         </div>
                                       </div>
                                       <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-success" ng-click="task.deleteOneTask(eachTask._id);">Delete</button>
+                                        <button type="button" class="btn btn-warning" ng-click="followup.deleteOneFollowup(eachFollowup._id);">Delete</button>
                                       </div>
                                       <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-success" ng-click="task.completeTask(eachTask._id);">Complete</button>
+                                        <button type="button" class="btn btn-warning" ng-click="followup.completeFollowup(eachFollowup._id);">Complete</button>
                                       </div>
                                     </div>
                                   </div>
 
-                                  <!-- Task function button group when complete -->
-                                  <div class="text-center" ng-if="eachTask.complete_date != 'Incomplete'">
+                                  <!-- Followup function button group when complete-->
+                                  <div class="text-center" ng-if="eachFollowup.complete_date != 'Incomplete'">
                                     <div class="btn-group btn-group-justified" role="group" aria-label="taskFunctions">
                                       <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createFollowup{{eachTask._id}}" href="#createFollowup{{eachTask._id}}">Add Follow Up</button>
-                                      </div>
-                                      <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-success" ng-click="task.deleteOneTask(eachTask._id);">Delete</button>
+                                        <button type="button" class="btn btn-warning" ng-click="followup.deleteOneFollowup(eachFollowup._id);">Delete</button>
                                       </div>
                                     </div>
                                   </div>
 
                                   <br>
 
-                                  <!-- Task detail table -->
+                                  <!-- Followup detail table -->
                                   <table class="table table-responsive table-bordered table-hover">
                                     <tr>
                                       <th>Created by: </th>
-                                      <td>{{eachTask.creator}}</td>
+                                      <td>{{eachFollowup.creator}}</td>
                                     </tr>
                                     <tr>
                                       <th>Description: </th>
-                                      <td>{{eachTask.description}}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>Assignee: </th>
-                                      <td>{{eachTask.assigneeName}}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>Assignee Department: </th>
-                                      <td>{{eachTask.assignee_dept}}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>Estimate Cost: </th>
-                                      <td>{{eachTask.estimate_cost}}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>Actual Cost: </th>
-                                      <td>{{eachTask.actual_cost}}</td>
+                                      <td>{{eachFollowup.description}}</td>
                                     </tr>
                                     <tr>
                                       <th>Last Modified: </th>
-                                      <td>{{eachTask.last_modified_date | date : format}}</td>
+                                      <td>{{eachFollowup.last_modified_date | date : format}}</td>
                                     </tr>
                                     <tr>
                                       <th>Date Created: </th>
-                                      <td>{{eachTask.dateCreated | date : format}}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>Start Date: </th>
-                                      <td>{{eachTask.start_date | date : format}}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>Due Date: </th>
-                                      <td>{{eachTask.due_date | date : format}}  <span class="label label-success" ng-if="eachTask.complete_date == 'Incomplete'">{{eachTask.status}}</span></td>
+                                      <td>{{eachFollowup.dateCreated | date : format}}</td>
                                     </tr>
                                     <tr>
                                       <th>Complete Date: </th>
-                                      <td>{{eachTask.complete_date | date : format}}</td>
+                                      <td>{{eachFollowup.complete_date | date : format}}</td>
                                     </tr>
                                   </table>
-
-                                  <!-- Modal for Creating Followup -->
-                                  <div id="createFollowup{{eachTask._id}}" class="modal fade" role="dialog">
-                                    <div class="modal-dialog">
-                                      <!-- Modal content-->
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                          <h4 class="modal-title">Create a new follow up</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                          <form ng-submit="followup.createFollowup(eachTask._id)">
-                                            Title: <br>
-                                            <input class="form-control" type="text" name=title ng-model="followup.followupData.followupTitle" required="true">
-                                            Description: <br>
-                                            <input class="form-control input-lg" type="text" name=description ng-model="followup.followupData.followupDescription" required="true">
-                                            <div class="text-center">
-                                              <br><button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
-                                              <button class="btn btn-info btn-lg" type="submit">Submit</button>
-                                            </div>
-                                          </form>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <br>
-
-                                  <!-- Followup heading setup -->
-                                  <div class="panel-group" ng-repeat="eachFollowup in followup.followups | filter: { followupTaskID: eachTask._id }">
-                                    <div class="panel panel-warning">
-                                      <div class="panel-heading" data-toggle="collapse" ng-click="true" data-target="#followupDetails{{eachFollowup._id}}" href="#followupDetails{{eachFollowup._id}}">
-                                        <h5><span class="glyphicon glyphicon-paperclip"></span> {{eachFollowup.title}} <span class="glyphicon glyphicon-check pull-right" ng-if="eachFollowup.complete_date != 'Incomplete'"></span></h5>
-                                      </div>
-                                      <div class="panel-collapse collapse out" id="followupDetails{{eachFollowup._id}}">
-                                        <p class="panel-body">
-
-                                          <!-- Followup function button group when incomplete-->
-                                          <div class="text-center" ng-if="eachFollowup.complete_date == 'Incomplete'">
-                                            <div class="btn-group btn-group-justified" role="group" aria-label="taskFunctions">
-                                              <div class="btn-group" role="group">
-                                                <div class="dropdown">
-                                                  <button type="button" class="btn btn-warning dropdown-toggle" id="updateDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    Update <span class="glyphicon glyphicon-triangle-bottom pull-right"></span>
-                                                  </button>
-                                                  <ul class="dropdown-menu" aria-labelledby="updateDropdown">
-                                                    <li><a href="#">Status</a></li>
-                                                    <li><a href="#">Other details</a></li>
-                                                  </ul>
-                                                </div>
-                                              </div>
-                                              <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-warning" ng-click="followup.deleteOneFollowup(eachFollowup._id);">Delete</button>
-                                              </div>
-                                              <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-warning" ng-click="followup.completeFollowup(eachFollowup._id);">Complete</button>
-                                              </div>
-                                            </div>
-                                          </div>
-
-                                          <!-- Followup function button group when complete-->
-                                          <div class="text-center" ng-if="eachFollowup.complete_date != 'Incomplete'">
-                                            <div class="btn-group btn-group-justified" role="group" aria-label="taskFunctions">
-                                              <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-warning" ng-click="followup.deleteOneFollowup(eachFollowup._id);">Delete</button>
-                                              </div>
-                                            </div>
-                                          </div>
-
-                                          <br>
-
-                                          <!-- Followup detail table -->
-                                          <table class="table table-responsive table-bordered table-hover">
-                                            <tr>
-                                              <th>Created by: </th>
-                                              <td>{{eachFollowup.creator}}</td>
-                                            </tr>
-                                            <tr>
-                                              <th>Description: </th>
-                                              <td>{{eachFollowup.description}}</td>
-                                            </tr>
-                                            <tr>
-                                              <th>Last Modified: </th>
-                                              <td>{{eachFollowup.last_modified_date | date : format}}</td>
-                                            </tr>
-                                            <tr>
-                                              <th>Date Created: </th>
-                                              <td>{{eachFollowup.dateCreated | date : format}}</td>
-                                            </tr>
-                                            <tr>
-                                              <th>Complete Date: </th>
-                                              <td>{{eachFollowup.complete_date | date : format}}</td>
-                                            </tr>
-                                          </table>
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </div>
                                 </p>
                               </div>
                             </div>
@@ -458,20 +454,24 @@
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-2">
-
-                </div>
-
-                <!-- Create project button -->
-                <div class="navbar-pilled">
-                  <div class="container navbar-fixed-bottom">
-                    <ul class="nav navbar-nav navbar-right">
-                      <button ng-if="main.loggedIn" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createProject">Create Project</button>
-                    </ul>
-                  </div>
-                </div>
+                </p>
               </div>
             </div>
           </div>
         </div>
+        <div class="col-md-2">
+
+        </div>
+
+        <!-- Create project button -->
+        <div class="navbar-pilled">
+          <div class="container navbar-fixed-bottom">
+            <ul class="nav navbar-nav navbar-right">
+              <button ng-if="main.loggedIn" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createProject">Create Project</button>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
