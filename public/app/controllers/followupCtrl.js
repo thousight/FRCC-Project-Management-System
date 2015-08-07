@@ -40,6 +40,38 @@ angular.module('followupCtrl', ['projectService'])
     location.reload();
   }
 
+  // Finding the specific followup from vm.followups
+  var findFollowup = function(id) {
+    for (var i = 0; i < vm.followups.length; i++) {
+      if (vm.followups[i]._id == id) {
+        return vm.followups[i];
+      }
+    }
+  }
+
+  vm.preUpdateFollowup = function(id) {
+    var theFollowup = findFollowup(id);
+
+    vm.updateFollowupData = {
+      title: theFollowup.title,
+      description: theFollowup.description
+    };
+  }
+
+  vm.updateFollowup = function(id) {
+    vm.message = '';
+    vm.updateFollowupData._id = id;
+    Followup.updateFollowup(vm.updateFollowupData)
+    .success(function(data) {
+      // Clear up the project
+      vm.updateFollowupData = '';
+      vm.message = data.message;
+      var modalName = '#updateFollowup' + id;
+      $(modalName).modal('hide');
+      location.reload();
+    })
+  }
+
   socketio.on('followup', function(data) {
     vm.followups.push(data);
   })

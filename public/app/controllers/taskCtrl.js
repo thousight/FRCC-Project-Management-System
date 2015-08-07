@@ -47,6 +47,42 @@ angular.module('taskCtrl', ['projectService'])
     location.reload();
   }
 
+  // Finding the specific task from vm.tasks
+  var findTask = function(id) {
+    for (var i = 0; i < vm.tasks.length; i++) {
+      if (vm.tasks[i]._id == id) {
+        return vm.tasks[i];
+      }
+    }
+  }
+
+  vm.preUpdateTask = function(id) {
+    var theTask = findTask(id);
+
+    vm.updateTaskData = {
+      title: theTask.title,
+      description: theTask.description,
+      assigneeName: theTask.assigneeName,
+      actual_cost: theTask.actual_cost,
+      start_date: new Date(theTask.start_date),
+      due_date: new Date(theTask.due_date)
+    };
+  }
+
+  vm.updateTask = function(id) {
+    vm.message = '';
+    vm.updateTaskData._id = id;
+    Task.updateTask(vm.updateTaskData)
+    .success(function(data) {
+      // Clear up the project
+      vm.updateTaskData = '';
+      vm.message = data.message;
+      var modalName = '#updateTask' + id;
+      $(modalName).modal('hide');
+      location.reload();
+    })
+  }
+
   socketio.on('task', function(data) {
     vm.tasks.push(data);
   })

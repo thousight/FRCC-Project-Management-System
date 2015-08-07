@@ -64,6 +64,10 @@ angular.module('projectService', [])
   taskFactory.countCompletedTask = function(id) {
     return $http.post('/api/countCompletedTask', {id: id});
   }
+  taskFactory.updateTask = function(taskData) {
+    return $http.post('/api/updateTask', taskData);
+  }
+
   return taskFactory;
 })
 
@@ -90,6 +94,10 @@ angular.module('projectService', [])
       complete_date: complete_date
     });
   }
+  followupFactory.updateFollowup = function(followupData) {
+    return $http.post('/api/updateFollowup', followupData);
+  }
+
   return followupFactory;
 })
 

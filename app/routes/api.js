@@ -201,17 +201,16 @@ module.exports = function(app, express, io) {
       priority: req.body.priority,
       status: calcStatus(),
       assign_dept: req.body.assign_dept,
-      actual_cost: req.body.actual_cost,
       last_modified_date: Date.now(),
       due_date: req.body.due_date,
       start_date: req.body.start_date
     };
-    Project.findByIdAndUpdate(req.body._id, { $set: update }, function (err, project) {
+    Project.update( {_id: req.body._id}, { $set: update }, function (err, project) {
       if (err) {
         res.send(err);
         return;
       }
-      res.send(project);
+      res.json(project);
     })
   })
 
@@ -408,6 +407,57 @@ module.exports = function(app, express, io) {
     })
   })
 
+  // updateTask api
+  api.post('/updateTask', function(req, res) {
+    var calcStatus = function()　{
+      var now = new Date();
+      var today_obj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      var start_obj = new Date(req.body.start_date);
+      var due_obj = new Date(req.body.due_date);
+      var today = today_obj.getTime();
+      var start = start_obj.getTime();
+      var due = due_obj.getTime();
+      // Now is before project start date
+      if (today < start) {
+        return "Not started";
+      }
+      // Today is project start date and it's not an one-day event
+      else if (today == start && start != due) {
+        return "Starts today";
+      }
+      // Today is project due date or it's an one-day event
+      else if (today == due || start == due) {
+        return "Due today";
+      }
+      // Now is in project date range
+      else if (today > start && today < due && start != due) {
+        return "In progress";
+      }
+      // Anything else
+      else {
+        return "Passed due";
+      }
+    }
+    var update = {
+      title: req.body.title,
+      description: req.body.description,
+      assigneeName: req.body.assigneeName,
+      assignee_dept: req.body.assignee_dept,
+      status: calcStatus(),
+      actual_cost: req.body.actual_cost,
+      last_modified_date: Date.now(),
+      due_date: req.body.due_date,
+      start_date: req.body.start_date
+    };
+    Task.update( {_id: req.body._id}, { $set: update }, function (err, task) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(task);
+    })
+  })
+
   // Followup
 
   // All Followup api
@@ -486,6 +536,50 @@ module.exports = function(app, express, io) {
     })
   })
 
+  // updateFollowup api
+  api.post('/updateFollowup', function(req, res) {
+    var calcStatus = function()　{
+      var now = new Date();
+      var today_obj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      var start_obj = new Date(req.body.start_date);
+      var due_obj = new Date(req.body.due_date);
+      var today = today_obj.getTime();
+      var start = start_obj.getTime();
+      var due = due_obj.getTime();
+      // Now is before project start date
+      if (today < start) {
+        return "Not started";
+      }
+      // Today is project start date and it's not an one-day event
+      else if (today == start && start != due) {
+        return "Starts today";
+      }
+      // Today is project due date or it's an one-day event
+      else if (today == due || start == due) {
+        return "Due today";
+      }
+      // Now is in project date range
+      else if (today > start && today < due && start != due) {
+        return "In progress";
+      }
+      // Anything else
+      else {
+        return "Passed due";
+      }
+    }
+    var update = {
+      title: req.body.title,
+      description: req.body.description,
+      last_modified_date: Date.now()
+    };
+    Followup.update( {_id: req.body._id}, { $set: update }, function (err, followup) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      res.json(followup);
+    })
+  })
 
   // User
 

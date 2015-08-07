@@ -95,9 +95,9 @@
                       Title: <br>
                       <input class="form-control" type="text" name=title ng-model="project.updateProjectData.title" required="true">
                       Short Description: <br>
-                      <input class="form-control" type="text" name=short_description ng-model="project.updateProjectData.short_description" required="true" value="{{eachProject.short_description}}">
+                      <input class="form-control" type="text" name=short_description ng-model="project.updateProjectData.short_description" required="true">
                       Description: <br>
-                      <input class="form-control input-lg" type="text" name=description ng-model="project.updateProjectData.description" required="true" value="{{eachProject.description}}">
+                      <input class="form-control input-lg" type="text" name=description ng-model="project.updateProjectData.description" required="true">
                       Priority: <br>
                       <input type="radio" name=priority ng-model="project.updateProjectData.priority" value="Important">Important<br>
                       <input type="radio" name=priority ng-model="project.updateProjectData.priority" value="Emergent">Emergent<br>
@@ -108,9 +108,9 @@
                         <option value="Media">Media</option>
                       </select>
                       Start Date: <br>
-                      <input class="form-control" type="date" name=start_date ng-model="project.updateProjectData.start_date" required="true" value="{{eachProject.start_date}}">
+                      <input class="form-control" type="date" name=start_date ng-model="project.updateProjectData.start_date" required="true">
                       Due Date: <br>
-                      <input class="form-control" type="date" name=due_date  ng-model="project.updateProjectData.due_date" required="true" value="{{eachProject.due_date}}">
+                      <input class="form-control" type="date" name=due_date  ng-model="project.updateProjectData.due_date" required="true">
                       <div class="text-center">
                         <br><button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
                         <button class="btn btn-primary btn-lg" type="submit">Submit</button>
@@ -244,6 +244,8 @@
                             <input class="form-control" type="text" name=assign_dept ng-model="task.taskData.assigneeName" required="true">
                             Estimate Cost: <br>
                             <input class="form-control" type="number" name=estimate_cost ng-model="task.taskData.taskEstimate_cost" required="true">
+                            Actual Cost: <br>
+                            <input class="form-control" type="number" name=estimate_cost ng-model="task.taskData.taskActual_cost" required="true">
                             Start Date: <br>
                             <input class="form-control" type="date" name=start_date ng-model="task.taskData.taskStart_date" required="true">
                             Due Date: <br>
@@ -260,6 +262,39 @@
 
                   <!-- Task heading setup -->
                   <div class="panel-group" ng-repeat="eachTask in task.tasks | filter: { taskProjectID: eachProject._id }">
+
+                    <!-- Modal for Updating Task -->
+                    <div id="updateTask{{eachTask._id}}" class="modal fade" role="dialog">
+                      <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Update {{eachTask.title}}</h4>
+                          </div>
+                          <div class="modal-body">
+                            <form ng-submit="task.updateTask(eachTask._id)">
+                              Title: <br>
+                              <input class="form-control" type="text" name=title ng-model="task.updateTaskData.title" required="true">
+                              Description: <br>
+                              <input class="form-control input-lg" type="text" name=description ng-model="task.updateTaskData.description" required="true">
+                              Assignee: <br>
+                              <input class="form-control" type="text" name=assignee ng-model="task.updateTaskData.assigneeName" required="true">
+                              Actual Cost: <br>
+                              <input class="form-control" type="number" name=actual_cost ng-model="task.updateTaskData.actual_cost" required="true">
+                              Start Date: <br>
+                              <input class="form-control" type="date" name=start_date ng-model="task.updateTaskData.start_date" required="true">
+                              Due Date: <br>
+                              <input class="form-control" type="date" name=due_date  ng-model="task.updateTaskData.due_date" required="true">
+                              <div class="text-center">
+                                <br><button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
+                                <button class="btn btn-primary btn-lg" type="submit">Submit</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
                     <div class="panel panel-success">
                       <div class="panel-heading" data-toggle="collapse" ng-click="true" data-target="#taskDetails{{eachTask._id}}" href="#taskDetails{{eachTask._id}}">
@@ -278,7 +313,7 @@
                                   </button>
                                   <ul class="dropdown-menu" aria-labelledby="updateDropdown">
                                     <li><a href="#">Status</a></li>
-                                    <li><a href="#">Other details</a></li>
+                                    <li><a href="#" data-toggle="modal" ng-click="task.preUpdateTask(eachTask._id);" data-target="#updateTask{{eachTask._id}}" href="#updateTask{{eachTask._id}}">Other details</a></li>
                                   </ul>
                                 </div>
                               </div>
@@ -382,6 +417,33 @@
 
                           <!-- Followup heading setup -->
                           <div class="panel-group" ng-repeat="eachFollowup in followup.followups | filter: { followupTaskID: eachTask._id }">
+
+                            <!-- Modal for Updating Followup -->
+                            <div id="updateFollowup{{eachFollowup._id}}" class="modal fade" role="dialog">
+                              <div class="modal-dialog">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Update {{eachFollowup.title}}</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form ng-submit="followup.updateFollowup(eachFollowup._id)">
+                                      Title: <br>
+                                      <input class="form-control" type="text" name=title ng-model="followup.updateFollowupData.title" required="true">
+                                      Description: <br>
+                                      <input class="form-control input-lg" type="text" name=description ng-model="followup.updateFollowupData.description" required="true">
+                                      <div class="text-center">
+                                        <br><button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
+                                        <button class="btn btn-primary btn-lg" type="submit">Submit</button>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+
                             <div class="panel panel-warning">
                               <div class="panel-heading" data-toggle="collapse" ng-click="true" data-target="#followupDetails{{eachFollowup._id}}" href="#followupDetails{{eachFollowup._id}}">
                                 <h5><span class="glyphicon glyphicon-paperclip"></span> {{eachFollowup.title}} <span class="glyphicon glyphicon-check pull-right" ng-if="eachFollowup.complete_date != 'Incomplete'"></span></h5>
@@ -391,7 +453,7 @@
 
                                   <!-- Followup function button group when incomplete-->
                                   <div class="text-center" ng-if="eachFollowup.complete_date == 'Incomplete'">
-                                    <div class="btn-group btn-group-justified" role="group" aria-label="taskFunctions">
+                                    <div class="btn-group btn-group-justified" role="group" aria-label="folloupFunctions">
                                       <div class="btn-group" role="group">
                                         <div class="dropdown">
                                           <button type="button" class="btn btn-warning dropdown-toggle" id="updateDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -399,7 +461,7 @@
                                           </button>
                                           <ul class="dropdown-menu" aria-labelledby="updateDropdown">
                                             <li><a href="#">Status</a></li>
-                                            <li><a href="#">Other details</a></li>
+                                            <li><a href="#" data-toggle="modal" ng-click="followup.preUpdateFollowup(eachFollowup._id);" data-target="#updateFollowup{{eachFollowup._id}}" href="#updateFollowup{{eachFollowup._id}}">Other details</a></li>
                                           </ul>
                                         </div>
                                       </div>
@@ -414,7 +476,7 @@
 
                                   <!-- Followup function button group when complete-->
                                   <div class="text-center" ng-if="eachFollowup.complete_date != 'Incomplete'">
-                                    <div class="btn-group btn-group-justified" role="group" aria-label="taskFunctions">
+                                    <div class="btn-group btn-group-justified" role="group" aria-label="folloupFunctions">
                                       <div class="btn-group" role="group">
                                         <button type="button" class="btn btn-warning" ng-click="followup.deleteOneFollowup(eachFollowup._id);">Delete</button>
                                       </div>
