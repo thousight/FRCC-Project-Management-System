@@ -1,13 +1,26 @@
+var taskLength;
+var projectLength;
+
 angular.module('projectCtrl', ['projectService'])
 
-.controller('ProjectController', function(Project, Task, socketio, $filter, $scope) {
+.controller('ProjectController', function(Project, Task, Followup, socketio, $filter, $scope) {
   var vm = this;
+
+  var projectTasks;
+
+  // Get tasks
+  Task.getTasks()
+  .success(function(data) {
+    vm.projectTasks = data;
+    taskLength = vm.projectTasks.length;
+  })
 
   // Get projects
   Project.getProjects()
   .success(function(data) {
     vm.projects = data;
-    for(var i = 0; i < vm.projects.length; i++){
+    projectLength = vm.projects.length;
+    for (var i = 0; i < projectLength; i++){
       vm.projects[i].percentage = vm.percentage(vm.projects[i]._id);
     }
   })
@@ -35,12 +48,22 @@ angular.module('projectCtrl', ['projectService'])
     if (confirm("Are you sure you want to delete this project? If you do, all related tasks and followups will also be deleted.")) {
       Project.deleteProject(id);
       Task.deleteAllTasks(id);
+
+      var deleteAllFollowupsWithProjectID = function(id) {
+        for (var i = 0; i < vm.projectTasks.length; i++){
+          if (vm.projectTasks[i].taskProjectID == id) {
+            Followup.deleteAllFollowups(vm.projectTasks[i]._id);
+          }
+        }
+      }
+
+      deleteAllFollowupsWithProjectID(id);
+
       location.reload();
     } else {
       return;
     }
   }
-
 
   // Finding the specific project from vm.projects
   var findProject = function(id) {
@@ -51,6 +74,7 @@ angular.module('projectCtrl', ['projectService'])
     }
   }
 
+  // Parsing data to data model
   vm.preUpdateProject = function(id) {
     var theProject = findProject(id);
 
@@ -70,7 +94,7 @@ angular.module('projectCtrl', ['projectService'])
     vm.updateProjectData._id = id;
     Project.updateProject(vm.updateProjectData)
     .success(function(data) {
-      // Clear up the project
+      // Clear up the projectData
       vm.updateProjectData = '';
       vm.message = data.message;
       var modalName = '#updateProject' + id;
@@ -80,29 +104,32 @@ angular.module('projectCtrl', ['projectService'])
   }
 
   vm.percentage = function(id) {
-    var totalTasks = Task.countTotalTask(id);
-    var completedTasks = Task.countCompletedTask(id);
-    console.log(Task.countTotalTask(id) + " total");
-    console.log(Task.countCompletedTask(id) + " completed");
+    var totalTasks = 0;
+    var completedTasks = 0;
+
+    for (var i = 0; i < taskLength; i++) {
+      if (vm.projectTasks[i].taskProjectID == id) {
+        totalTasks++;
+        if (vm.projectTasks[i].complete_date != "Incomplete") {
+          completedTasks++;
+        }
+      }
+    }
+
     return 100 * (completedTasks / totalTasks);
   }
 
   vm.completeProject = function(id) {
-    if (vm.percentage(id) == 100.0) {
-
-      vm.projectData._id = id;
-
+    if (vm.percentage(id) == 100) {
       var now = new Date();
       var today_obj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       today_obj = $filter('date')(today_obj, "MMM d, yyyy");
-      vm.projectData.complete_date  = String(today_obj);
+      complete_date  = String(today_obj);
 
-      Project.completeProject(vm.projectData)
-      .success(function(data) {
-        // Clear up the project
-        vm.projectData = '';
-        vm.message = data.message;
-      })
+      console.log(id);
+      console.log(complete_date);
+      Project.completeProject(id, complete_date);
+      location.reload();
     } else {
       alert("There are still tasks to be finished, complete them first.");
       return;

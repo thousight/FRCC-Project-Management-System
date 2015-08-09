@@ -43,7 +43,7 @@ angular.module('taskCtrl', ['projectService'])
     today_obj = $filter('date')(today_obj, "MMM d, yyyy");
     var complete_date  = String(today_obj);
 
-    Task.completeTask(id, complete_date)
+    Task.completeTask(id, complete_date);
     location.reload();
   }
 

@@ -17,8 +17,11 @@ angular.module('projectService', [])
   projectFactory.updateProject = function(projectData) {
     return $http.post('/api/updateProject', projectData);
   }
-  projectFactory.completeProject = function(projectData) {
-    return $http.post('/api/completeProject', projectData);
+  projectFactory.completeProject = function(id, complete_date) {
+    return $http.post('/api/completeProject', {
+      _id: id,
+      complete_date: complete_date
+    });
   }
   projectFactory.projectStatus = function() {
     return $http.get('/api/projectStatus');
@@ -48,21 +51,6 @@ angular.module('projectService', [])
       id: id,
       complete_date: complete_date
     });
-  }
-  taskFactory.countTotalTask = function(id) {
-    return $http.post('/api/countTotalTask', {id: id})
-      .then(function(response) {
-        if (typeof response.data == 'object') {
-          return response.data;
-        } else {
-          return "Invalid data";
-        }
-      }, function(response) {
-        return "Invalid data";
-      })
-  }
-  taskFactory.countCompletedTask = function(id) {
-    return $http.post('/api/countCompletedTask', {id: id});
   }
   taskFactory.updateTask = function(taskData) {
     return $http.post('/api/updateTask', taskData);

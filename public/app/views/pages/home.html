@@ -127,9 +127,9 @@
               </div>
               <div class="panel-collapse collapse out" id="projectDetails{{eachProject._id}}">
                 <p class="panel-body">
-                  <div class="progress">
+                  <div class="progress" ng-if="eachProject.complete_date == 'Incomplete'">
                     <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{eachProject.percentage}}%;">
-                      {{eachProject.percentage}}%
+                      {{eachProject.percentage | number : fractionSize}}%
                     </div>
                   </div>
 

@@ -385,28 +385,6 @@ module.exports = function(app, express, io) {
     })
   })
 
-  // countTotalTask api
-  api.post('/countTotalTask', function(req, res) {
-    Task.count({taskProjectID: req.body.id}, function(err, count) {
-      if (err) {
-        res.send(err);
-        return;
-      }
-      res.send(count);
-    })
-  })
-
-  // countCompletedTask api
-  api.post('/countCompletedTask', function(req, res) {
-    Task.count({$and: [{taskProjectID: req.body.id}, {complete_date: {$ne: "Incomplete"}}]}, function(err, count) {
-      if (err) {
-        res.send(err);
-        return;
-      }
-      res.send(count);
-    })
-  })
-
   // updateTask api
   api.post('/updateTask', function(req, res) {
     var calcStatus = function()　{
