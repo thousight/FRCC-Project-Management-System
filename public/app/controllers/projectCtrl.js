@@ -1,5 +1,9 @@
 var taskLength;
 var projectLength;
+var allProjectsLength;
+var allProjectsTasksLength;
+var projectTasks;
+var allProjectTasks;
 
 angular.module('projectCtrl', ['projectService'])
 
@@ -11,8 +15,9 @@ angular.module('projectCtrl', ['projectService'])
   // Get tasks
   Task.getTasks()
   .success(function(data) {
-    vm.projectTasks = data;
-    taskLength = vm.projectTasks.length;
+    projectTasks = data;
+    taskLength = projectTasks.length;
+    return projectTasks;
   })
 
   // Get projects
@@ -50,9 +55,9 @@ angular.module('projectCtrl', ['projectService'])
       Task.deleteAllTasks(id);
 
       var deleteAllFollowupsWithProjectID = function(id) {
-        for (var i = 0; i < vm.projectTasks.length; i++){
-          if (vm.projectTasks[i].taskProjectID == id) {
-            Followup.deleteAllFollowups(vm.projectTasks[i]._id);
+        for (var i = 0; i < projectTasks.length; i++){
+          if (projectTasks[i].taskProjectID == id) {
+            Followup.deleteAllFollowups(projectTasks[i]._id);
           }
         }
       }
@@ -108,9 +113,9 @@ angular.module('projectCtrl', ['projectService'])
     var completedTasks = 0;
 
     for (var i = 0; i < taskLength; i++) {
-      if (vm.projectTasks[i].taskProjectID == id) {
+      if (projectTasks[i].taskProjectID == id) {
         totalTasks++;
-        if (vm.projectTasks[i].complete_date != "Incomplete") {
+        if (projectTasks[i].complete_date != "Incomplete") {
           completedTasks++;
         }
       }
@@ -142,9 +147,44 @@ angular.module('projectCtrl', ['projectService'])
 
 })
 
-.controller('AllProjectsController', function(projects, socketio, $controller) {
+
+
+
+.controller('AllProjectsController', function(Project, Task, socketio, $controller) {
   var vm = this;
-  vm.projects = projects.data;
+  var allProjectTasks;
+
+  Task.allTasks()
+  .success(function(data) {
+    allProjectTasks = data;
+    allProjectsTasksLength = allProjectTasks.length;
+    return allProjectTasks;
+  })
+
+  Project.allProjects()
+  .success(function(data) {
+    vm.projects = data;
+    allProjectsLength = vm.projects.length;
+    for (var i = 0; i < allProjectsLength; i++){
+      vm.projects[i].percentage = vm.percentage(vm.projects[i]._id);
+    }
+  })
+
+  vm.percentage = function(id) {
+    var totalTasks = 0;
+    var completedTasks = 0;
+
+    for (var i = 0; i < allProjectsTasksLength; i++) {
+      if (allProjectTasks[i].taskProjectID == id) {
+        totalTasks++;
+        if (allProjectTasks[i].complete_date != "Incomplete") {
+          completedTasks++;
+        }
+      }
+    }
+
+    return 100 * (completedTasks / totalTasks);
+  }
 
   socketio.on('project', function(data) {
     vm.projects.push(data);

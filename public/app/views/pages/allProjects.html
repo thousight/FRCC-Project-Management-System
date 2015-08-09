@@ -19,7 +19,7 @@
               <p class="panel-body">
                 <div class="progress">
                   <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{eachProject.percentage}}%;">
-                    {{eachProject.percentage}}%
+                    {{eachProject.percentage | number : fractionSize}}%
                   </div>
                 </div>
 

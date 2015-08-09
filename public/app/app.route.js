@@ -10,12 +10,7 @@ angular.module('appRoutes', ['ngRoute'])
     .when('/allProjects', {
       templateUrl: '/app/views/pages/allProjects.html',
       controller: 'AllProjectsController',
-      controllerAs: 'project',
-      resolve: {
-        projects: function(Project) {
-          return Project.allProjects();
-        }
-      }
+      controllerAs: 'project'
     })
     .when('/allUsers', {
       templateUrl: '/app/views/pages/allUsers.html',

@@ -102,7 +102,7 @@ module.exports = function(app, express, io) {
         return "Starts today";
       }
       // Today is project due date or it's an one-day event
-      else if (today == due || start == due) {
+      else if (today == due || start == due == today) {
         return "Due today";
       }
       // Now is in project date range
@@ -182,7 +182,7 @@ module.exports = function(app, express, io) {
         return "Starts today";
       }
       // Today is project due date or it's an one-day event
-      else if (today == due || start == due) {
+      else if (today == due || start == due == today) {
         return "Due today";
       }
       // Now is in project date range
@@ -244,7 +244,7 @@ module.exports = function(app, express, io) {
         return "Starts today";
       }
       // Today is project due date or it's an one-day event
-      else if (today == due || start == due) {
+      else if (today == due || start == due == today) {
         return "Due today";
       }
       // Now is in project date range
@@ -304,7 +304,7 @@ module.exports = function(app, express, io) {
         return "Starts today";
       }
       // Today is task due date or it's an one-day event
-      else if (today == due || start == due) {
+      else if (today == due || start == due == today) {
         return "Due today";
       }
       // Now is in task date range
@@ -404,7 +404,7 @@ module.exports = function(app, express, io) {
         return "Starts today";
       }
       // Today is project due date or it's an one-day event
-      else if (today == due || start == due) {
+      else if (today == due || start == due == today) {
         return "Due today";
       }
       // Now is in project date range
@@ -533,7 +533,7 @@ module.exports = function(app, express, io) {
         return "Starts today";
       }
       // Today is project due date or it's an one-day event
-      else if (today == due || start == due) {
+      else if (today == due || start == due == today) {
         return "Due today";
       }
       // Now is in project date range
