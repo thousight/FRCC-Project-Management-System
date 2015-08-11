@@ -10,5 +10,7 @@ angular.module('userCtrl', ['userService'])
 
   $scope.search = [];
 
-  
+  $(".users").select2({
+    tags: true
+  });
 })

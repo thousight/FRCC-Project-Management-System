@@ -10,7 +10,7 @@ var ProjectSchema = new Schema ({
   description: String,
   priority: String,
   status: String,
-  assign_dept: String,
+  assigneeID: Schema.Types.ObjectId,
   estimate_cost: Number,
   actual_cost: Number,
   last_modified_date: Date,
