@@ -38,6 +38,7 @@ angular.module('projectCtrl', ['projectService'])
       alert("Due date can't be earlier than start date, please decide a new due date.");
       return;
     }
+    vm.projectData.assigneeID = $("#users").val();
     // Create project
     vm.message = '';
     Project.create(vm.projectData)

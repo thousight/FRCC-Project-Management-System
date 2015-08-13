@@ -8,7 +8,7 @@ var TaskSchema = new Schema ({
   title: String,
   description: String,
   status: String,
-  assigneeID: Schema.Types.ObjectId,
+  assigneeID: Array,
   estimate_cost: Number,
   actual_cost: Number,
   last_modified_date: Date,

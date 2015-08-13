@@ -62,7 +62,7 @@
                     Due Date: <br>
                     <input class="form-control" type="date" name=due_date  ng-model="project.projectData.due_date" required="true">
                     Assignee: <br>
-                    <select class="form-control users" multiple="multiple" style="width: 100%" type="text" name=assign_dept ng-model="project.projectData.assigneeID" required="true">
+                    <select class="form-control users" id="users" multiple="multiple" style="width: 100%" type="text" ng-model="project.projectData.assigneeID" required="true">
                       <optgroup ng-repeat="eachUser in user.users | filter: search | orderBy: 'lastname' track by $index">
                         <option value="{{eachUser._id}}"> {{eachUser.firstname}} {{eachUser.lastname}} {{eachUser.cname}} </option>
                       </optgroup>
@@ -102,16 +102,16 @@
                         Priority: <br>
                         <input type="radio" name=priority ng-model="project.updateProjectData.priority" value="Important">Important<br>
                         <input type="radio" name=priority ng-model="project.updateProjectData.priority" value="Emergent">Emergent<br>
-                        Assignee: <br>
-                        <select class="form-control users" multiple="multiple" style="width: 100%" type="text" name=assign_dept ng-model="project.updateProjectData.assigneeID" required="true">
-                          <optgroup ng-repeat="eachUser in user.users | filter: search | orderBy: 'lastname' track by $index">
-                            <option value="{{eachUser._id}}"> {{eachUser.firstname}} {{eachUser.lastname}} {{eachUser.cname}} </option>
-                          </optgroup>
-                        </select>
                         Start Date: <br>
                         <input class="form-control" type="date" name=start_date ng-model="project.updateProjectData.start_date" required="true">
                         Due Date: <br>
                         <input class="form-control" type="date" name=due_date  ng-model="project.updateProjectData.due_date" required="true">
+                        Assignee: <br>
+                        <select class="form-control users" id="users" multiple="multiple" style="width: 100%" type="text" name=assign_dept ng-model="project.updateProjectData.assigneeID" required="true">
+                          <optgroup ng-repeat="eachUser in user.users | filter: search | orderBy: 'lastname' track by $index">
+                            <option value="{{eachUser._id}}"> {{eachUser.firstname}} {{eachUser.lastname}} {{eachUser.cname}} </option>
+                          </optgroup>
+                        </select>
                         <div class="text-center">
                           <br><button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
                           <button class="btn btn-primary btn-lg" type="submit">Submit</button>
@@ -192,7 +192,7 @@
                       </tr>
                       <tr>
                         <th>Assignee: </th>
-                        <td>{{eachProject.assigneeID}}</td>
+                        <td>{{eachProject.assigneeID | idToName}}</td>
                       </tr>
                       <tr>
                         <th>Estimate Cost: </th>
@@ -241,12 +241,6 @@
                               <input class="form-control" type="text" name=title ng-model="task.taskData.taskTitle" required="true">
                               Description: <br>
                               <input class="form-control input-lg" type="text" name=description ng-model="task.taskData.taskDescription" required="true">
-                              Assignee: <br>
-                              <select class="form-control users" multiple="multiple" style="width: 100%" type="text" name=assign_dept ng-model="task.taskData.assigneeID" required="true">
-                                <optgroup ng-repeat="eachUser in user.users | filter: search | orderBy: 'lastname' track by $index">
-                                  <option value="{{eachUser._id}}"> {{eachUser.firstname}} {{eachUser.lastname}} {{eachUser.cname}} </option>
-                                </optgroup>
-                              </select>
                               Estimate Cost: <br>
                               <input class="form-control" type="number" name=estimate_cost ng-model="task.taskData.taskEstimate_cost" required="true">
                               Actual Cost: <br>
@@ -255,6 +249,12 @@
                               <input class="form-control" type="date" name=start_date ng-model="task.taskData.taskStart_date" required="true">
                               Due Date: <br>
                               <input class="form-control" type="date" name=due_date  ng-model="task.taskData.taskDue_date" required="true">
+                              Assignee: <br>
+                              <select class="form-control createTask_Users" id="createTask_Users" multiple="multiple" style="width: 100%" type="text" ng-model="task.taskData.assigneeID" required="true">
+                                <optgroup ng-repeat="eachUser in user.users | filter: search | orderBy: 'lastname' track by $index">
+                                  <option value="{{eachUser._id}}"> {{eachUser.firstname}} {{eachUser.lastname}} {{eachUser.cname}} </option>
+                                </optgroup>
+                              </select>
                               <div class="text-center">
                                 <br><button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
                                 <button class="btn btn-info btn-lg" type="submit">Submit</button>
@@ -283,18 +283,18 @@
                                 <input class="form-control" type="text" name=title ng-model="task.updateTaskData.title" required="true">
                                 Description: <br>
                                 <input class="form-control input-lg" type="text" name=description ng-model="task.updateTaskData.description" required="true">
-                                Assignee: <br>
-                                <select class="form-control users" multiple="multiple" style="width: 100%" type="text" name=assign_dept ng-model="task.updateTaskData.assigneeID" required="true">
-                                  <optgroup ng-repeat="eachUser in user.users | filter: search | orderBy: 'lastname' track by $index">
-                                    <option value="{{eachUser._id}}"> {{eachUser.firstname}} {{eachUser.lastname}} {{eachUser.cname}} </option>
-                                  </optgroup>
-                                </select>
                                 Actual Cost: <br>
                                 <input class="form-control" type="number" name=actual_cost ng-model="task.updateTaskData.actual_cost" required="true">
                                 Start Date: <br>
                                 <input class="form-control" type="date" name=start_date ng-model="task.updateTaskData.start_date" required="true">
                                 Due Date: <br>
                                 <input class="form-control" type="date" name=due_date  ng-model="task.updateTaskData.due_date" required="true">
+                                Assignee: <br>
+                                <select class="form-control users" id="users" multiple="multiple" style="width: 100%" type="text" name=assign_dept ng-model="task.updateTaskData.assigneeID" required="true">
+                                  <optgroup ng-repeat="eachUser in user.users | filter: search | orderBy: 'lastname' track by $index">
+                                    <option value="{{eachUser._id}}"> {{eachUser.firstname}} {{eachUser.lastname}} {{eachUser.cname}} </option>
+                                  </optgroup>
+                                </select>
                                 <div class="text-center">
                                   <br><button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
                                   <button class="btn btn-primary btn-lg" type="submit">Submit</button>

@@ -11,6 +11,20 @@ angular.module('userCtrl', ['userService'])
   $scope.search = [];
 
   $(".users").select2({
-    tags: true
+    tags: true,
+    multiple: true,
+    data: true,
+    createTag: function(params) {
+      return undefined;
+    }
+  });
+
+  $(".createTask_Users").select2({
+    tags: true,
+    multiple: true,
+    data: true,
+    createTag: function(params) {
+      return undefined;
+    }
   });
 })

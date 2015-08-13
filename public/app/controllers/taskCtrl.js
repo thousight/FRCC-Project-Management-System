@@ -16,6 +16,7 @@ angular.module('taskCtrl', ['projectService'])
       return;
     }
     vm.taskData.taskProjectID = ProjectID;
+    vm.taskData.assigneeID = $("#createTask_Users").val();
     // Create task
     vm.message = '';
     Task.create(vm.taskData)
