@@ -144,7 +144,7 @@ module.exports = function(app, express, io) {
     });
   })
   .get(function(req, res) {
-    Project.find( {creatorID: req.decoded.id}, function(err, project) {
+    Project.find( {$or: [{creatorID: req.decoded.id}, {assigneeID: req.decoded.id}]}, function(err, project) {
       if (err) {
         res.send(err);
         return;

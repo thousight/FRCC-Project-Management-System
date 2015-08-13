@@ -5,9 +5,9 @@ var allProjectsTasksLength;
 var projectTasks;
 var allProjectTasks;
 
-angular.module('projectCtrl', ['projectService'])
+angular.module('projectCtrl', ['projectService', 'userService'])
 
-.controller('ProjectController', function(Project, Task, Followup, socketio, $filter, $scope) {
+.controller('ProjectController', function(Project, Task, Followup, User, socketio, $filter, $scope) {
   var vm = this;
 
   var projectTasks;
@@ -25,9 +25,16 @@ angular.module('projectCtrl', ['projectService'])
   .success(function(data) {
     vm.projects = data;
     projectLength = vm.projects.length;
-    for (var i = 0; i < projectLength; i++){
-      vm.projects[i].percentage = vm.percentage(vm.projects[i]._id);
-    }
+
+    // Get all users
+    User.allUsers()
+    .success(function(data) {
+      vm.users = data;
+      for (var i = 0; i < projectLength; i++) {
+        vm.projects[i].percentage = vm.percentage(vm.projects[i]._id);
+        vm.projects[i].assigneeID = $filter('idToName')(vm.projects[i].assigneeID, vm.users);
+      }
+    })
   })
 
   vm.createProject = function() {
@@ -131,9 +138,6 @@ angular.module('projectCtrl', ['projectService'])
       var today_obj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       today_obj = $filter('date')(today_obj, "MMM d, yyyy");
       complete_date  = String(today_obj);
-
-      console.log(id);
-      console.log(complete_date);
       Project.completeProject(id, complete_date);
       location.reload();
     } else {
@@ -141,6 +145,24 @@ angular.module('projectCtrl', ['projectService'])
       return;
     }
   }
+
+  $(".users").select2({
+    tags: true,
+    multiple: true,
+    data: true,
+    createTag: function(params) {
+      return undefined;
+    }
+  });
+
+  $(".createTask_Users").select2({
+    tags: true,
+    multiple: true,
+    data: true,
+    createTag: function(params) {
+      return undefined;
+    }
+  });
 
   socketio.on('project', function(data) {
     vm.projects.push(data);
@@ -151,7 +173,7 @@ angular.module('projectCtrl', ['projectService'])
 
 
 
-.controller('AllProjectsController', function(Project, Task, socketio, $controller) {
+.controller('AllProjectsController', function(Project, Task, User, socketio, $controller, $filter) {
   var vm = this;
   var allProjectTasks;
 
@@ -166,9 +188,16 @@ angular.module('projectCtrl', ['projectService'])
   .success(function(data) {
     vm.projects = data;
     allProjectsLength = vm.projects.length;
-    for (var i = 0; i < allProjectsLength; i++){
-      vm.projects[i].percentage = vm.percentage(vm.projects[i]._id);
-    }
+
+    // Get all users
+    User.allUsers()
+    .success(function(data) {
+      vm.users = data;
+      for (var i = 0; i < allProjectsLength; i++) {
+        vm.projects[i].percentage = vm.percentage(vm.projects[i]._id);
+        vm.projects[i].assigneeID = $filter('idToName')(vm.projects[i].assigneeID, vm.users);
+      }
+    })
   })
 
   vm.percentage = function(id) {
