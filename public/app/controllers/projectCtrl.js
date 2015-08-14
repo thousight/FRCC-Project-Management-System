@@ -12,29 +12,46 @@ angular.module('projectCtrl', ['projectService', 'userService'])
 
   var projectTasks;
 
-  // Get tasks
-  Task.getTasks()
-  .success(function(data) {
-    projectTasks = data;
-    taskLength = projectTasks.length;
-    return projectTasks;
-  })
-
   // Get projects
   Project.getProjects()
   .success(function(data) {
     vm.projects = data;
     projectLength = vm.projects.length;
 
-    // Get all users
-    User.allUsers()
+    // Get tasks
+    Task.getTasks()
     .success(function(data) {
-      vm.users = data;
-      for (var i = 0; i < projectLength; i++) {
-        vm.projects[i].percentage = vm.percentage(vm.projects[i]._id);
-        vm.projects[i].assigneeID = $filter('idToName')(vm.projects[i].assigneeID, vm.users);
+      projectTasks = data;
+      taskLength = projectTasks.length;
+
+      // Project actual cost calculator
+      var actualCostCalc = function (projectID) {
+        var total;
+        for (var e = 0; e < taskLength; e++) {
+          if (projectTasks[e].taskProjectID == projectID) {
+            if (projectTasks[e].actual_cost && typeof total == 'undefined') {
+              total = 0;
+              total += projectTasks[e].actual_cost;
+            } else if (projectTasks[e].actual_cost && typeof total != 'undefined') {
+              total += projectTasks[e].actual_cost;
+            }
+          }
+        }
+        return total;
       }
+
+      // Get all users
+      User.allUsers()
+      .success(function(data) {
+        vm.users = data;
+        for (var i = 0; i < projectLength; i++) {
+          vm.projects[i].percentage = vm.percentage(vm.projects[i]._id);
+          vm.projects[i].assigneeID = $filter('idToName')(vm.projects[i].assigneeID, vm.users);
+          vm.projects[i].actual_cost = actualCostCalc(vm.projects[i]._id);
+        }
+      })
     })
+
   })
 
   vm.createProject = function() {
