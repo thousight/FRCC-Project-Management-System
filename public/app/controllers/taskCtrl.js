@@ -1,10 +1,19 @@
-angular.module('taskCtrl', ['projectService'])
+angular.module('taskCtrl', ['projectService', 'userService'])
 
-.controller('TaskController', function(Task, socketio, $filter) {
+.controller('TaskController', function(Task, User, socketio, $filter) {
   var vm = this;
+
   Task.getTasks()
   .success(function(data) {
     vm.tasks = data;
+    // Get all users
+    User.allUsers()
+    .success(function(data) {
+      vm.users = data;
+      for (var i = 0; i < vm.tasks.length; i++) {
+        vm.tasks[i].assigneeID = $filter('idToName')(vm.tasks[i].assigneeID, vm.users);
+      }
+    })
   })
 
   vm.createTask = function(ProjectID) {
@@ -64,7 +73,7 @@ angular.module('taskCtrl', ['projectService'])
       title: theTask.title,
       description: theTask.description,
       assigneeName: theTask.assigneeName,
-      actual_cost: theTask.actual_cost,
+      actual_cost: theTask.taskActual_Cost,
       start_date: new Date(theTask.start_date),
       due_date: new Date(theTask.due_date)
     };

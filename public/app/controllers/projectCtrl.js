@@ -51,7 +51,6 @@ angular.module('projectCtrl', ['projectService', 'userService'])
         }
       })
     })
-
   })
 
   vm.createProject = function() {
@@ -194,26 +193,43 @@ angular.module('projectCtrl', ['projectService', 'userService'])
   var vm = this;
   var allProjectTasks;
 
-  Task.allTasks()
-  .success(function(data) {
-    allProjectTasks = data;
-    allProjectsTasksLength = allProjectTasks.length;
-    return allProjectTasks;
-  })
-
   Project.allProjects()
   .success(function(data) {
     vm.projects = data;
     allProjectsLength = vm.projects.length;
 
-    // Get all users
-    User.allUsers()
+    // Get tasks
+    Task.allTasks()
     .success(function(data) {
-      vm.users = data;
-      for (var i = 0; i < allProjectsLength; i++) {
-        vm.projects[i].percentage = vm.percentage(vm.projects[i]._id);
-        vm.projects[i].assigneeID = $filter('idToName')(vm.projects[i].assigneeID, vm.users);
+      allProjectTasks = data;
+      allProjectsTasksLength = allProjectTasks.length;
+
+      // Project actual cost calculator
+      var actualCostCalc = function (projectID) {
+        var total;
+        for (var e = 0; e < allProjectsTasksLength; e++) {
+          if (allProjectTasks[e].taskProjectID == projectID) {
+            if (allProjectTasks[e].actual_cost && typeof total == 'undefined') {
+              total = 0;
+              total += allProjectTasks[e].actual_cost;
+            } else if (allProjectTasks[e].actual_cost && typeof total != 'undefined') {
+              total += allProjectTasks[e].actual_cost;
+            }
+          }
+        }
+        return total;
       }
+
+      // Get all users
+      User.allUsers()
+      .success(function(data) {
+        vm.users = data;
+        for (var i = 0; i < allProjectsLength; i++) {
+          vm.projects[i].percentage = vm.percentage(vm.projects[i]._id);
+          vm.projects[i].assigneeID = $filter('idToName')(vm.projects[i].assigneeID, vm.users);
+          vm.projects[i].actual_cost = actualCostCalc(vm.projects[i]._id);
+        }
+      })
     })
   })
 

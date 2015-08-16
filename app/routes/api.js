@@ -325,7 +325,7 @@ module.exports = function(app, express, io) {
       status: calcStatus(),
       assigneeID: req.body.assigneeID,
       estimate_cost: req.body.taskEstimate_cost,
-      actual_cost: req.body.TaskActual_cost,
+      actual_cost: req.body.taskActual_Cost,
       last_modified_date: Date.now(),
       due_date: req.body.taskDue_date,
       start_date: req.body.taskStart_date,
@@ -337,6 +337,23 @@ module.exports = function(app, express, io) {
         res.send(err);
         return;
       }
+      Project.findById(newTask.taskProjectID, function (err, project) {
+        if (err) {
+          res.send(err);
+          return;
+        }
+        for (var a = 0; a < newTask.assigneeID.length; a++) {
+          if (project.assigneeID.indexOf(newTask.assigneeID[a]) <= -1) {
+            project.assigneeID.set(project.assigneeID.length, newTask.assigneeID[a]);
+          }
+        }
+        project.save(function(err, project) {
+          if (err) {
+            res.send(err);
+            return;
+          }
+        });
+      })
       io.emit('task', newTask);
       res.json({
         message: "New Task Created!"
@@ -344,7 +361,7 @@ module.exports = function(app, express, io) {
     });
   })
   .get(function(req, res) {
-    Task.find( {creatorID: req.decoded.id}, function(err, task) {
+    Task.find( {$or: [{creatorID: req.decoded.id}, {assigneeID: req.decoded.id}]}, function(err, task) {
       if (err) {
         res.send(err);
         return;
@@ -419,17 +436,77 @@ module.exports = function(app, express, io) {
       description: req.body.description,
       assigneeID: req.body.assigneeID,
       status: calcStatus(),
-      actual_cost: req.body.actual_cost,
+      actual_cost: req.body.taskActual_Cost,
       last_modified_date: Date.now(),
       due_date: req.body.due_date,
       start_date: req.body.start_date
     };
-    Task.update( {_id: req.body._id}, { $set: update }, function (err, task) {
+
+    var oriAssigneeID = [];
+    var oriAcutalCost;
+    var actualCostDiff;
+    var deletedAssignee = [];
+
+    Task.findById(req.body._id, function (err, task) {
       if (err) {
         res.send(err);
         return;
       }
-      res.json(task);
+
+      oriAssigneeID = task.assigneeID;
+      oriAcutalCost = task.taskActual_Cost;
+
+      Task.update( {_id: req.body._id}, { $set: update }, function (err, task) {
+        if (err) {
+          res.send(err);
+          return;
+        }
+
+        // Finding the deleted assigneeID(s)
+        for (var b = 0; b < oriAssigneeID.length; b++) {
+          if (task.assigneeID.indexOf(oriAssigneeID[b]) <= -1) {
+            deletedAssignee[deletedAssignee.length] = oriAssigneeID[b];
+          }
+        }
+
+        Project.findById(task.taskProjectID, function (err, project) {
+          if (err) {
+            res.send(err);
+            return;
+          }
+
+          // Add assigneeID if there is a new one added to task
+          for (var a = 0; a < task.assigneeID.length; a++) {
+            if (project.assigneeID.indexOf(task.assigneeID[a]) <= -1) {
+              project.assigneeID.set(project.assigneeID.length, task.assigneeID[a]);
+            }
+          }
+
+          // Remove assigneeID from project if there are assigneeIDs removed from task, need to check if the assigneeID is the only assigneeID left in project
+          Task.find( {taskProjectID: project._id}, function(err, yourTasks) {
+            if (err) {
+              res.send(err);
+              return;
+            }
+            var appear = 0;
+            for (var d = 0; d < yourTasks.length; d++) {
+                for (var f = 0; f < deletedAssignee.length; f++) {
+                  if (yourTasks[d].assigneeID.indexOf(deletedAssignee[f]) <= -1) {
+                    project.assigneeID.splice(project.assigneeID.indexOf[deletedAssignee[f]], 1);
+                  }
+                }
+            }
+          });
+
+          project.save(function(err, project) {
+            if (err) {
+              res.send(err);
+              return;
+            }
+          });
+        })
+        res.json(task);
+      })
     })
   })
 
