@@ -343,6 +343,10 @@ module.exports = function(app, express, io) {
           return;
         }
         for (var a = 0; a < newTask.assigneeID.length; a++) {
+
+          // If task assigneeID doesn't have an index in project's assigneeID array,
+          // meaning if task assigneeID doesn't exist in the project's assigneeID,
+          // then add that assigneeID to project's assigneeID array
           if (project.assigneeID.indexOf(newTask.assigneeID[a]) <= -1) {
             project.assigneeID.set(project.assigneeID.length, newTask.assigneeID[a]);
           }
@@ -488,24 +492,27 @@ module.exports = function(app, express, io) {
               res.send(err);
               return;
             }
-            var appear = 0;
-            for (var d = 0; d < yourTasks.length; d++) {
-                for (var f = 0; f < deletedAssignee.length; f++) {
-                  if (yourTasks[d].assigneeID.indexOf(deletedAssignee[f]) <= -1) {
-                    project.assigneeID.splice(project.assigneeID.indexOf[deletedAssignee[f]], 1);
-                  }
+            var appearance = 0;
+            for (var f = 0; f < deletedAssignee.length; f++) {
+              for (var d = 0; d < yourTasks.length; d++) {
+                if (yourTasks[d].assigneeID.indexOf(deletedAssignee[f]) <= 0) {
+                  appearance++;
                 }
-            }
-          });
-
-          project.save(function(err, project) {
-            if (err) {
-              res.send(err);
-              return;
+              }
+              if (appearance == 0) {
+                project.assigneeID.splice(project.assigneeID.indexOf[deletedAssignee[f]], 1);
+                project.save(function(err, project) {
+                  if (err) {
+                    res.send(err);
+                    return;
+                  }
+                });
+              } else {
+                appearance = 0;
+              }
             }
           });
         })
-        res.json(task);
       })
     })
   })
@@ -709,6 +716,7 @@ module.exports = function(app, express, io) {
     })
   })
 
+  // api for getting logged in user info
   api.get('/me', function(req, res) {
     res.json(req.decoded);
   });
